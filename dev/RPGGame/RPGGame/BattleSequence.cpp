@@ -105,25 +105,27 @@ void BattleSequence::RollForInitiative(Player& player)
 // Shows your stats on the left and every enemy in the battle on the right
 void BattleSequence::CharacterStats(Player& player, const std::vector<Character*>& enemies) const
 {
-	const size_t columnWidth = 40; // how far over the enemy column starts
+	const size_t leftWidth = 40;  // how far over the enemy column starts
+	const size_t rightWidth = 40; // wide enough for the longest enemy line
 
-	// Adds spaces to the end of text so the right column lines up
-	auto padRight = [columnWidth](std::string text)
+	// Adds spaces to the end of text so it always takes up the same width.
+	// That way, redrawing a shorter line still covers the old one.
+	auto pad = [](std::string text, size_t width)
 		{
-			if (text.size() < columnWidth)
+			if (text.size() < width)
 			{
-				text += std::string(columnWidth - text.size(), ' ');
+				text += std::string(width - text.size(), ' ');
 			}
 			return text;
 		};
 
-	GEngine->Print(padRight("<=><=><=> Your Team <=><=><=>"), Color::Green, 0);
-	GEngine->Print("<=><=><=> Enemy Team <=><=><=>", Color::Red, 1);
+	GEngine->Print(pad("<=><=><=> Your Team <=><=><=>", leftWidth), Color::Green, 0);
+	GEngine->Print(pad("<=><=><=> Enemy Team <=><=><=>", rightWidth), Color::Red, 1);
 
-	// Lines for the left column
+	// Lines for the left column (health clamped so it never shows below 0)
 	std::vector<std::string> playerLines;
 	playerLines.push_back("You: " + player.charStats.Name);
-	playerLines.push_back("Health: " + std::to_string(player.charStats.Health));
+	playerLines.push_back("Health: " + std::to_string(std::max(0, player.charStats.Health)));
 	playerLines.push_back("Stamina: " + std::to_string(player.charStats.Stamina));
 
 	// Lines for the right column (one per enemy)
@@ -132,7 +134,7 @@ void BattleSequence::CharacterStats(Player& player, const std::vector<Character*
 	{
 		if (e->IsAlive())
 		{
-			enemyLines.push_back(e->charStats.Name + " | Health: " + std::to_string(e->charStats.Health));
+			enemyLines.push_back(e->charStats.Name + " | Health: " + std::to_string(std::max(0, e->charStats.Health)));
 		}
 		else
 		{
@@ -148,11 +150,22 @@ void BattleSequence::CharacterStats(Player& player, const std::vector<Character*
 		std::string left = (i < playerLines.size()) ? playerLines[i] : "";
 		std::string right = (i < enemyLines.size()) ? enemyLines[i] : "";
 
-		GEngine->Print(padRight(left), Color::Green, 0);
-		GEngine->Print(right, Color::Red, 1);
+		GEngine->Print(pad(left, leftWidth), Color::Green, 0);
+		GEngine->Print(pad(right, rightWidth), Color::Red, 1);
 	}
 
 	GEngine->Print("", Color::White, 1);
+}
+
+void BattleSequence::DrawBattleScreen(Player& player, const std::vector<Character*>& enemies, int round) const
+{
+	GEngine->ClearConsole();
+
+	GEngine->Print("<=><=><=><=><=><=><=> CHARACTER STATS <=><=><=><=><=><=><=>", Color::Blue, 2);
+	CharacterStats(player, enemies);
+	GEngine->Print("<=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=>", Color::Blue, 2);
+
+	GEngine->Print("--- Round " + std::to_string(round) + " ---", Color::Blue, 1);
 }
 
 void BattleSequence::DrawStatsAtTop(Player& player, const std::vector<Character*>& enemies) const
@@ -222,17 +235,6 @@ void BattleSequence::RunCombat(Player& player)
 
 	while (player.IsAlive() && Character::AnyAlive(enemies))
 	{
-		GEngine->ClearConsole();
-
-		GEngine->Print("<=><=><=><=><=><=><=> CHARACTER STATS <=><=><=><=><=><=><=>", Color::Blue, 2);
-
-		statsRow = GetCursorRow();          // remember where the panel starts
-		CharacterStats(player, enemies);
-
-		GEngine->Print("<=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=>", Color::Blue, 2);
-
-		GEngine->Print("--- Round " + std::to_string(round) + " ---", Color::Blue, 1);
-
 		for (Character* c : turnOrder)
 		{
 			if (!c->IsAlive())
@@ -240,19 +242,17 @@ void BattleSequence::RunCombat(Player& player)
 				continue; // dead characters skip their turn
 			}
 
+			// Fresh screen with up-to-date stats before every turn
+			DrawBattleScreen(player, enemies, round);
 
 			if (c == &player)
 			{
-
 				player.TakeTurn(player, enemies);
 			}
 			else
 			{
 				static_cast<Enemy*>(c)->TakeTurn(player);
 			}
-
-			DrawStatsAtTop(player, enemies);
-
 
 			GEngine->WaitForKey();
 
@@ -266,6 +266,9 @@ void BattleSequence::RunCombat(Player& player)
 		round++;
 	}
 
+	// Show the final stats once more before the win/loss message
+	DrawBattleScreen(player, enemies, round - 1);
+
 	if (player.IsAlive())
 	{
 		GEngine->TypeOut("Victory! All enemies have been defeated!", 30ms, 1000ms, Color::Cyan, 1);
@@ -278,12 +281,6 @@ void BattleSequence::RunCombat(Player& player)
 	}
 
 	GEngine->WaitForKey();
-}
-
-// The player's turn: show everyone's stats, then the battle menu
-void BattleSequence::PlayerTurn(Player& player, const std::vector<Character*>& enemies)
-{
-	BattleMenu(player, enemies);
 }
 
 // Lists the living enemies and returns the one the player picks
@@ -336,6 +333,7 @@ void BattleSequence::Abilities(Player& player, const std::vector<Character*>& en
 
 		GEngine->Print(player.charAbilities.abilities[spellChoice - 1].Name + " hits " + target->charStats.Name
 			+ " for " + std::to_string(damage) + "!", Color::Green, 1);
+
 
 		player.playerLeaderboard.TotalDamageGiven += damage;
 		player.Attack(&player, target, damage);

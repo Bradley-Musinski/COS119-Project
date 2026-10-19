@@ -17,9 +17,8 @@ private:
 	void RollForInitiative(Player& player);
 	void RunCombat(Player& player);
 	void CharacterStats(Player& player, const std::vector<Character*>& enemies) const;
+	void DrawBattleScreen(Player& player, const std::vector<Character*>& enemies, int round) const;
 	void DrawStatsAtTop(Player& player, const std::vector<Character*>& enemies) const;
-	void PlayerTurn(Player& player, const std::vector<Character*>& enemies);
-	void EnemyTurn(Character* enemy, Player& player);
 	void Abilities(Player& player, const std::vector<Character*>& enemies);
 
 
