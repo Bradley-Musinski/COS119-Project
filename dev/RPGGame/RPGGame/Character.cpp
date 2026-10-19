@@ -15,7 +15,24 @@ int Character::RollInitiative()
 }
 
 
-
 void Character::PrintStats() const
 {}
+
+bool Character::IsAlive(const Character * character) const
+{
+	return character->charStats.Health > 0;
+}
+
+bool Character::AnyAlive(const std::vector<Character*>& characters) const
+{
+	for (const Character* c : characters)
+	{
+		if (IsAlive(c))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 

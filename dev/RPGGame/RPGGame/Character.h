@@ -34,15 +34,18 @@ public:
 	}
 
 	int RollInitiative();
+	int Initiative() const { return initiative; }
 
 	virtual void PrintStats() const;
 
 	std::string Name() const { return charStats.Name; }
 	void Name(std::string _name) { charStats.Name = _name; }
 
-	int Initiative() const { return initiative; }
+	bool IsAlive(const Character* character) const;
+	bool AnyAlive(const std::vector<Character*>& characters) const;
 
 private:
+
 	int initiative = 0;
 };
 

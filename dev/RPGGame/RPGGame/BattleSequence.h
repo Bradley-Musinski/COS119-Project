@@ -22,9 +22,6 @@ private:
 	void EnemyTurn(Character* enemy, Player& player);
 	void Abilities(Player& player, const std::vector<Character*>& enemies);
 	void Attack(Character* attacker, Character* target, int damage);
-	bool IsAlive(const Character* character) const;
-	bool AnyAlive(const std::vector<Character*>& characters) const;
-
 
 	short statsRow = 0; // console row where the stats panel starts
 
@@ -36,7 +33,9 @@ private:
 	std::vector<Character*> turnOrder;
 	const std::vector<Enemy*>& EnemyList() const { return enemyList; }
 	const std::vector<Character*>& TurnOrder() const { return turnOrder; }
-	Character* ChooseTarget(const std::vector<Character*>& enemies);
+	Character* ChooseTarget(const std::vector<Character*>& enemies) const;
+
+	Character* character;
 
 	bool bIsLooping = true;
 };

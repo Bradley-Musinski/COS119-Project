@@ -12,6 +12,8 @@
 #include "Input.h"
 #include "Menus.h"
 
+Character* character = nullptr;
+
 // Destructor
 BattleSequence::~BattleSequence()
 {
@@ -39,7 +41,7 @@ void BattleSequence::Battle(Player& player)
 		GEngine->ProcessDeferredDestruction();
 
 		// Don't start another fight if the player is dead
-		if (!IsAlive(&player))
+		if (!player.IsAlive(&player))
 		{
 			break;
 		}
@@ -130,7 +132,7 @@ void BattleSequence::CharacterStats(Player& player, const std::vector<Character*
 	std::vector<std::string> enemyLines;
 	for (Character* e : enemies)
 	{
-		if (IsAlive(e))
+		if (character->IsAlive(e))
 		{
 			enemyLines.push_back(e->charStats.Name + " | Health: " + std::to_string(e->charStats.Health));
 		}
@@ -220,7 +222,7 @@ void BattleSequence::RunCombat(Player& player)
 
 	int round = 1;
 	
-	while (IsAlive(&player) && AnyAlive(enemies))
+	while (character->IsAlive(&player) && character->AnyAlive(enemies))
 	{
 		GEngine->ClearConsole();
 
@@ -234,7 +236,7 @@ void BattleSequence::RunCombat(Player& player)
 
 		for (Character* c : turnOrder)
 		{
-			if (!IsAlive(c))
+			if (!character->IsAlive(c))
 			{
 				continue; // dead characters skip their turn
 			}
@@ -253,7 +255,7 @@ void BattleSequence::RunCombat(Player& player)
 			GEngine->WaitForKey();
 
 			// Stop as soon as one side is wiped out
-			if (!IsAlive(&player) || !AnyAlive(enemies))
+			if (!character->IsAlive(&player) || !character->AnyAlive(enemies))
 			{
 				break;
 			}
@@ -264,7 +266,7 @@ void BattleSequence::RunCombat(Player& player)
 		round++;
 	}
 
-	if (IsAlive(&player))
+	if (character->IsAlive(&player))
 	{
 		GEngine->TypeOut("Victory! All enemies have been defeated!", 30ms, 1000ms, Color::Cyan, 1);
 		player.playerLeaderboard.TotalWins += 1;
@@ -285,13 +287,13 @@ void BattleSequence::PlayerTurn(Player& player, const std::vector<Character*>& e
 }
 
 // Lists the living enemies and returns the one the player picks
-Character* BattleSequence::ChooseTarget(const std::vector<Character*>& enemies)
+Character* BattleSequence::ChooseTarget(const std::vector<Character*>& enemies) const
 {
 	std::vector<Character*> targets;
 
 	for (Character* e : enemies)
 	{
-		if (IsAlive(e))
+		if (character->IsAlive(e))
 		{
 			targets.push_back(e);
 		}
@@ -349,28 +351,10 @@ void BattleSequence::Attack(Character* attacker, Character* target, int damage)
 	GEngine->TypeOut(attacker->charStats.Name + " attacks " + target->charStats.Name
 		+ " for " + std::to_string(damage) + " damage!", 15ms, 500ms, Color::Gray, 1);
 
-	if (!IsAlive(target))
+	if (!character->IsAlive(target))
 	{
 		GEngine->TypeOut(target->charStats.Name + " has been defeated!", 15ms, 500ms, Color::Red, 1);
 	}
-}
-
-bool BattleSequence::IsAlive(const Character* character) const
-{
-	return character->charStats.Health > 0;
-}
-
-bool BattleSequence::AnyAlive(const std::vector<Character*>& characters) const
-{
-	for (const Character* c : characters)
-	{
-		if (IsAlive(c))
-		{
-			return true;
-		}
-	}
-
-	return false;
 }
 
 short BattleSequence::GetCursorRow() const
