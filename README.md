@@ -47,11 +47,11 @@ Each week I will summarize my milestone activity and progress by writing a stand
 An update for my end-of-the-week check-in. All this week, I continued on tiding up my engine class, created the GameManager and the GameSession classes, along with bug fixing and issues that I had. Some of the issues/challenges that I found myself running into was placement of methods. For instance, initially I placed my main menu logic inside the engine, but that was the wrong idea since I wanted the engine to mainly worry about memory management and math-related things. So I did a lot of reworking on those classes. But solving these issues, along with independent research, has taught me where things should go when programming in general. I also taught me the importance of how different classes interact with each other. My next step for this week, will not be creating the player and enemy classes and implementing the battle logic and then fleshing out all the kinks and bugs. This will be completed before the next milestone!
 ### Week 2
 
-My next stand up will go here...
+During Week 2, I focused on implementing the battle sequence, creating enemies, and developing an initiative system inspired by D&D. I also improved the game loop, allowing players to transition between the SafeZone and battles without restarting the program. One of my biggest challenges was organizing the BattleSequence code, which I plan to continue refining.
 
 ### Week 3
 
-Stay tuned, this stand up is coming soon...
+For Week 3, my main focus will be implementing the inventory, item, and store systems. I also plan to improve the user interface, fix existing bugs, and polish the gameplay to make The Fallen Kingdom more complete and enjoyable.
 
 ### Week 4
 
