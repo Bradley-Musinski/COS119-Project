@@ -1,13 +1,9 @@
 #pragma once
 
-class GameEngine;
-
 class GameManager
 {
 public:
-	GameManager(GameEngine& _engine)
-		: Engine(_engine)
-	{}
+	GameManager() {};
 	
 	void MainMenu();
 
@@ -15,7 +11,6 @@ public:
 	
 
 private:
-	GameEngine& Engine;
 
 
 };

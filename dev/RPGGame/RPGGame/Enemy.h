@@ -5,8 +5,13 @@
 class Enemy : public Character
 {
 public:
+
     Enemy() = default;
+
+    void PrintStats() const override;
+
+
 private:
-    std::vector<int> numbers;
+
 };
 

@@ -140,16 +140,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AActor.cpp" />
+    <ClCompile Include="BattleSequence.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameSession.cpp" />
+    <ClCompile Include="Goblin.cpp" />
+    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Kobald.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Potions.cpp" />
     <ClCompile Include="RPGGame.cpp" />
+    <ClCompile Include="Town.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AActor.h" />
+    <ClInclude Include="BattleSequence.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CharacterCreator.h" />
     <ClInclude Include="CharacterTypes.h" />
@@ -158,12 +167,19 @@
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameSession.h" />
-    <ClInclude Include="Helper.h" />
+    <ClInclude Include="Goblin.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Kobald.h" />
     <ClInclude Include="Menus.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Potions.h" />
+    <ClInclude Include="Town.h" />
+    <ClInclude Include="SaveSystem.h" />
     <ClInclude Include="Screens.h" />
     <ClInclude Include="Abilties.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="UMath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

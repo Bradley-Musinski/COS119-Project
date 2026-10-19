@@ -6,7 +6,7 @@
 #include <vector>
 #include <array>
 #include <string_view>
-#include "helper.h"
+#include "GameEngine.h"
 #include "Player.h"
 
 namespace IntroLines
@@ -37,16 +37,17 @@ namespace Dialogue
 	{
 		for (const auto& line : CharacterCreator::Lines1)
 		{
-			Helper::TypeOut(line, 30, 1, Helper::Color::Cyan, 1);
+			GEngine->TypeOut(line, 30ms, 1s, Color::Cyan, 1);
 		}
 	}
+
 
 	void Intro()
 	{
 
 		for (const auto& line : IntroLines::Lines)
 		{
-			Helper::TypeOut(line, 30, 1, Helper::Color::White, 1);
+			GEngine->TypeOut(line, 30ms, 1s, Color::White, 1);
 		}
 
 	}

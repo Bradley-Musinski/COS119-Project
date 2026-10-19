@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "Helper.h"
 #include "Screens.h"
 #include "Input.h"
 
@@ -15,7 +14,7 @@ namespace Menus
 {
 
     // Main Menu 
-    static int MainMenu()
+    inline int MainMenu()
     {
         bool bIsLooping = true;
 
@@ -26,32 +25,31 @@ namespace Menus
             Screens::MenuOptions();
 
             int MenuChoice = Input::GetInput("\t\t\t\t\t\t\t >> ", 1, 4);
-   
+
             switch (MenuChoice)
             {
             case 1:
-                Helper::ClearConsole();
+                GEngine->ClearConsole();
                 break;
-                
+
             case 2:
-                Helper::ClearConsole();
+                GEngine->ClearConsole();
                 break;
 
             case 3:
-                Helper::ClearConsole();
+                GEngine->ClearConsole();
                 Screens::DisplayCredits();
                 break;
             case 4:
-                Helper::ClearConsole();
+                GEngine->ClearConsole();
                 Screens::GoodbyeMessage();
                 bIsLooping = false;
-                
+
                 break;
 
             default:
-                Helper::Print("ERROR: Invalid Choice...", Helper::Color::Red, 1);
-                Helper::Continue();
-                Helper::ClearConsole();
+                GEngine->Print("ERROR: Invalid Choice...", Color::Red, 1);
+                GEngine->ClearConsole();
                 break;
             }
 
@@ -59,4 +57,30 @@ namespace Menus
             return MenuChoice;
         }
     }
+
+    inline int BattleOptionsMenu()
+    {
+        Screens::BattleOptions();
+
+        int userChoice = Input::GetInput(">> ", 1, 4);
+
+        switch (userChoice)
+        {
+        case 1: // Basic Attack
+            break;
+        case 2: // Abilities
+            break;
+        case 3: // Items
+            break;
+        case 4: // Flee
+            GEngine->ClearConsole();
+            break;
+        default:
+            break;
+        }
+
+        return userChoice;
+
+    }
+
 }

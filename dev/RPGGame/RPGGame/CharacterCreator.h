@@ -14,7 +14,9 @@ namespace CharacterCreator
 	void ApplyClass(Player& player, const CharacterTypes& charClass)
 	{
 		player.charStats.ClassName = charClass.Name;
-		player.charStats.Health = charClass.Health;
+		player.charStats.MaxHealth = charClass.Health;
+		player.charStats.Health = player.charStats.MaxHealth;
+		player.charStats.Attack = charClass.Attack;
 		player.charStats.ArmorClass = charClass.ArmorClass;
 		player.charStats.Stamina = charClass.Stamina;
 		player.charAbilities.abilities = charClass.charAbilties;
@@ -29,11 +31,14 @@ namespace CharacterCreator
 		GEngine->Print(titlePad + charClass.Name, Color::BMagenta, 1);
 		GEngine->Print(border, Color::BMagenta, 2);
 
-		GEngine->Print("    \033[1mDesc: \033[0m" + charClass.Desc, Color::White, 2);
+		GEngine->Print("    \033[1mDesc: \033[0m" + charClass.Desc, Color::Gray, 2);
 
-		GEngine->Print("    \033[1mHP      : \033[22m" + std::to_string(charClass.Health), Color::Green, 1);
-		GEngine->Print("    \033[1mAC      : \033[22m" + std::to_string(charClass.ArmorClass), Color::Green, 1);
-		GEngine->Print("    \033[1mStamina : \033[22m" + std::to_string(charClass.Stamina), Color::Green, 2);
+		GEngine->Print("    \033[1mHP      : \033[22m" + 
+			std::to_string(charClass.Health), Color::Green, 1);
+		GEngine->Print("    \033[1mAC      : \033[22m" + 
+			std::to_string(charClass.ArmorClass), Color::Green, 1);
+		GEngine->Print("    \033[1mStamina : \033[22m" + 
+			std::to_string(charClass.Stamina), Color::Green, 2);
 
 		GEngine->Print("    \033[1mAbilties: \033[22m", Color::Green, 0);
 
@@ -48,13 +53,18 @@ namespace CharacterCreator
 				"No effect";
 
 			GEngine->Print(ability.Name + ": " + Effect, Color::Green, 0);
-			GEngine->Print("\n\t\t\033[3m" + ability.Desc + "\033[0m", Color::White, 1);
-			GEngine->Print("\t      ", Color::White, 0);
+			GEngine->Print("\n\t\t\033[3m" + ability.Desc + "\033[0m", Color::Gray, 1);
+			GEngine->Print("\t      ", Color::Gray, 0);
 		}
 
 		GEngine->PrintBlankLines(1);
 		GEngine->Print(border, Color::BMagenta, 2);
 	}
+
+
+	// ##===================##
+	//			  CREATE NAME
+	// ##===================##
 
 	void CreateName(Player& player)
 	{
@@ -67,6 +77,8 @@ namespace CharacterCreator
 		GEngine->TypeOut("[BAP] Every legend needs a name. What's yours?", 30ms, 1s, Color::Cyan, 2);
 		GEngine->Print(">> ", Color::White, 0);
 
+		Input::FlushInput();
+
 		std::string inputName;
 		getline(std::cin, inputName);
 		GEngine->PrintBlankLines(1);
@@ -74,6 +86,10 @@ namespace CharacterCreator
 		IsNameValid(inputName, player);
 
 	}
+
+	// ##===================##
+	//			  SELECT CLASS
+	// ##===================##
 
 	void SelectClass(Player& player)
 	{
@@ -95,14 +111,17 @@ namespace CharacterCreator
 			"      Stamina: " + std::to_string(Soldier.Stamina),
 			10ms, 0s, Color::Green, 2);
 
-		int ClassSelection = Input::GetInput(">> ", 1, 2);
+		Input::FlushInput();
 
+		int ClassSelection = Input::GetInput(">> ", 1, 2);
 
 		if (ClassSelection == 1)
 		{
 			GEngine->PrintBlankLines(1);
-			GEngine->TypeOut("[BAP] A Warlock, huh? Making deals with mysterious patrons already?", 30ms, 1s, Color::Cyan, 1);
-			GEngine->TypeOut("[BAP] Bold. I like it!", 30ms, 1s, Color::Cyan, 2);
+			GEngine->TypeOut("[BAP] A Warlock, huh? Making deals with mysterious patrons already?", 
+				30ms, 1s, Color::Cyan, 1);
+			GEngine->TypeOut("[BAP] Bold. I like it!", 
+				30ms, 1s, Color::Cyan, 2);
 
 			const std::string border = "  ##" + std::string(Soldier.Desc.size() + 4, '=') + "##";
 			const std::string titlePad((Warlock.Desc.size() + 8 - Warlock.Name.size()) / 2, ' ');
@@ -111,6 +130,8 @@ namespace CharacterCreator
 
 			GEngine->TypeOut("[BAP] Ready to sign on the dotted line? (Y/N)", 30ms, 0s, Color::Cyan, 1);
 			GEngine->Print(">> ", Color::White, 0);
+
+			Input::FlushInput();
 
 			char userChoice;
 			std::cin >> userChoice;
@@ -196,23 +217,27 @@ namespace CharacterCreator
 				}
 			}
 
-			GEngine->TypeOut("Are you sure this is correct (Y/N): " + inputName, 30ms, 1s, Color::White, 1);
+			GEngine->TypeOut("[BAP] So your name is " + inputName + "? (Y/N)", 30ms, 1s, Color::Cyan, 1);
 			GEngine->Print(" >> ", Color::White, 0);
+
+			Input::FlushInput();
 
 			char userChoice;
 			std::cin >> userChoice;
 
+			GEngine->PrintBlankLines(1);
+
 			if (userChoice == 'Y' or userChoice == 'y')
 			{
 				std::cin.ignore();
-				GEngine->TypeOut("[BAP] So your name is " + inputName + "?", 30ms, 1s, Color::Cyan, 1);
-				GEngine->TypeOut("[BAP] What a fitting name for a legend!", 30ms, 1s, Color::Cyan, 1);
+
+				GEngine->TypeOut("[BAP] Ah, " + inputName + "! What a fitting name for a legend!", 30ms, 1s, Color::Cyan, 1);
 				player.Name(inputName); // Sets the inputted name to the character's name located in the struct CharacterStats
 			}
 			else if (userChoice == 'N' or userChoice == 'n')
 			{
 				std::cin.ignore();
-				GEngine->ClearConsole();
+
 				CreateName(player);// Recursively restarts name creation if the input is 'N'
 
 			}
@@ -235,14 +260,24 @@ namespace CharacterCreator
 		}
 	}
 
+	void ShowStats(Player& player)
+	{
+		GEngine->ClearConsole();
+		player.PrintStats();
+
+		system("pause");
+
+	}
+
 	void CreateCharacter(Player& player)
 	{
 		Dialogue::CharacterCreateDialogue();
 		CreateName(player);
 		SelectClass(player);
+		ShowStats(player);
+
+		GEngine->ClearConsole();
 	}
-
-
 
 };
 

@@ -1,7 +1,7 @@
+#include <algorithm>
 #include "GameEngine.h"
 #include "GameManager.h"
 #include "AActor.h"
-#include "Helper.h"
 
 GameEngine* GEngine = nullptr; // Sets the Global GameEngine pointer to nullptr
 
@@ -20,7 +20,7 @@ void GameEngine::Run()
 {
 	bIsRunning = true;
 
-	GameManager manager(*this);
+	GameManager manager;
 
 	manager.MainMenu();
 }
@@ -44,7 +44,10 @@ void GameEngine::ProcessDeferredDestruction()
 
 void GameEngine::RegisterActor(AActor* actor)
 {
-	ActorRegistry.push_back(actor);
+	if (std::find(ActorRegistry.begin(), ActorRegistry.end(), actor) == ActorRegistry.end())
+	{
+		ActorRegistry.push_back(actor);
+	}
 }
 
 void GameEngine::PrintBlankLines(int numOfBlankLines)
@@ -61,23 +64,34 @@ void GameEngine::ErrorMessage(std::string message)
 	TypeOut(message, 1ms, 1s, Color::Red, 1);
 }
 
-void GameEngine::ClearLastLine()
+void GameEngine::ClearLastLine(int LineAmt)
 {
-	Print("\x1b[1A\x1b[2K\r", Color::White, 0);
+	for (int i = 0; i < LineAmt; i++)
+	{
+		Print("\x1b[1A\x1b[2K\r", Color::White, 0);
+	}
+
+}
+
+void GameEngine::WaitForKey()
+{
+	Print("Press any key to continue...", Color::Gray);
+#ifdef _WIN32
+	if (_getch()) // waits for any key instead
+	{
+		PrintBlankLines(1);
+	}
+#else
+	std::cin.get(); // waits for Enter instead
+#endif
 }
 
 void GameEngine::ClearConsole()
 {
 #ifdef _WIN32
-	system("cls"); // If the system is a windowOS then it calls this function
+	system("cls");
 #else
-	system("clear"); // If the system is not a windowOS (i.e. MacOS) then it calls this function
+	system("clear");
 #endif
 }
-
-void GameEngine::Continue()
-{
-	system("pause");
-}
-
 

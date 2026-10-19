@@ -4,7 +4,8 @@
 #include <thread>
 #include <chrono>
 #include <memory>
-#include "Helper.h"
+#include <conio.h> // console input/ouput - meant for reading keys directly from the keyboard
+#include <windows.h>
 
 using namespace std::chrono_literals;
 
@@ -75,13 +76,14 @@ public:
 	void RequesetQuit() { bIsRunning = false; }
 
 	void PrintBlankLines(int numOfBlankLines);
-	template <typename T> void Print(const T& message, Color color, int numOfBlankLines);
-	template <typename T> void TypeOut(const T& message, std::chrono::milliseconds delayMs, std::chrono::seconds delayLine, Color color, int BlankLines);
+	template <typename T> void Print(const T& message, Color color = Color::White, int numOfBlankLines = 0);
+	template <typename T> void TypeOut(const T& message, std::chrono::milliseconds delayMs, std::chrono::milliseconds, Color color = Color::White, int BlankLines = 0);
 	void ErrorMessage(std::string message);
-	void ClearLastLine();
+	void ClearLastLine(int LineAmt);
 
+	void WaitForKey();
 	void ClearConsole();
-	void Continue();
+
 
 
 private:
@@ -137,13 +139,35 @@ inline void GameEngine::Print(const T& message, Color color, int numOfBlankLines
 }
 
 template<typename T>
-inline void GameEngine::TypeOut(const T& message, std::chrono::milliseconds delayMs, std::chrono::seconds delayLine, Color color, int BlankLines)
+inline void GameEngine::TypeOut(const T& message, std::chrono::milliseconds delayMs, std::chrono::milliseconds delayLine, Color color, int BlankLines)
 {
+	bool skip = false;
+
 	for (char c : message)
 	{
+
+		// If user hits enter it will print the rest of the message instantly
+		if (!skip && _kbhit()) // checks to see the the key has been pressed
+		{
+			if (_getch() == 13) // Reads only one keey right away, without needing enter and without showing it on screen
+			{
+				skip = true;
+			}
+		}
+
+		if (skip)
+		{
+			Print(c, color, 0);
+			continue;
+		}
+
 		Print(c, color, 0);
+		std::cout << std::flush;
 		std::this_thread::sleep_for((delayMs));
+
+
 	}
+
 
 	std::this_thread::sleep_for((delayLine));
 	PrintBlankLines(BlankLines);

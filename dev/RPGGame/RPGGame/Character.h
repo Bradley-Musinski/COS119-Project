@@ -1,14 +1,13 @@
 #pragma once
 #include "AActor.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
 struct CharacterStats
 {
 	std::string Name = "";
 	std::string ClassName = "";
 	int Health = 0;
+	int Attack = 0;
+	int MaxHealth = 0;
 	int ArmorClass = 0;
 	int Stamina = 0;
 	int Exp = 0;
@@ -22,31 +21,28 @@ public:
 
 	Character() = default;
 
-	Character(std::string _name, std::string _classname, int _health, int _armorClass, int _stamina, int _exp)
+	Character(std::string _name, std::string _classname, int _health, int _attack, int _armorClass, int _stamina, int _exp)
 	{
 		charStats.Name = _name;
 		charStats.ClassName = _classname;
-		charStats.Health = _health;
+		charStats.Health = charStats.MaxHealth;
+		charStats.MaxHealth = _health;
+		charStats.Attack = _attack;
 		charStats.ArmorClass = _armorClass;
 		charStats.Stamina = _stamina;
 		charStats.Exp = _exp;
 	}
 
-	void TakeDamage(int _dmgAmt)
-	{
-		int reduction = static_cast<int>(charStats.ArmorClass / 0.00125);
-		int finalDMG = std::max(0, _dmgAmt - reduction);
-		charStats.Health -= finalDMG;
-	}
+	int RollInitiative();
 
-	void PrintStats() const
-	{
-		GEngine->Print("Name: " + charStats.Name + "| Health: " + std::to_string(charStats.Health), Color::Green, 1);
-
-	}
+	virtual void PrintStats() const;
 
 	std::string Name() const { return charStats.Name; }
 	void Name(std::string _name) { charStats.Name = _name; }
 
+	int Initiative() const { return initiative; }
+
+private:
+	int initiative = 0;
 };
 

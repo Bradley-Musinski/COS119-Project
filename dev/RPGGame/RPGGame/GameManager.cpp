@@ -5,16 +5,16 @@
 
 void GameManager::MainMenu()
 {
-	GameSession Session(Engine);
+	GameSession Session;
 
 
-	while (Engine.IsRunning())
+	while (GEngine->IsRunning())
 	{
 		int MenuChoice = Menus::MainMenu();
 
 		if (MenuChoice == 4)
 		{
-			Engine.RequesetQuit(); // Calls a function inside of the engine that flips a bool to false
+			GEngine->RequesetQuit(); // Calls a function inside of the engine that flips a bool to false
 
 		}
 

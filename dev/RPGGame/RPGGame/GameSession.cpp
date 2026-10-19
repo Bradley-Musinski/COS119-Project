@@ -1,53 +1,73 @@
 #include <thread>
+#include "Input.h"
 #include "GameSession.h"
 #include "GameEngine.h"
 #include "CharacterCreator.h"
+#include "BattleSequence.h"
+#include "Town.h"
 #include "Player.h"
+#include "Goblin.h"
+#include "Skeleton.h"
 #include "Dialogue.h"
-
 
 void GameSession::StartSession()
 {
-
+	Player* player = new Player();
 
 	if (bIsNewGame)
 	{
 		bIsNewGame = false;
-		Helper::Print("New Game Selected!", Helper::Color::Red, 1);
+		GEngine->ClearConsole();
 
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-		Helper::ClearConsole();
-
-		CreateCharacter();
+		CreateCharacter(*player);
 	}
 	else
 	{
-		Helper::Print("Player Data Loaded!", Helper::Color::Red, 1);
+		GEngine->Print("Player Data Loaded!", Color::Red, 1);
 	}
 
-	Dialogue::StartDialogue();
-
+	GameLoop(*player);
 }
 
-void GameSession::SafeZone()
+void GameSession::CreateCharacter(Player& player)
 {
 
-}
-
-void GameSession::BattleSequence()
-{
-
-}
-
-
-void GameSession::CreateCharacter()
-{
-	Player* player = new Player();
-	Engine.RegisterActor(player); // Registers the actor to the vector so it will be added to the destruction list
+	GEngine->RegisterActor(&player); // Registers the actor to the vector so it will be added to the destruction list
 
 	// Calls the CreateCharacter method from the CharacterCreator namespace
-	CharacterCreator::CreateCharacter(*player);
- }
+	CharacterCreator::CreateCharacter(player);
+}
+
+void GameSession::SafeZone(Player& player) // This will go in its own class eventually
+{
+	Town town(*this, player);
+	town.TownArea();
+
+}
+
+void GameSession::BattleMode(Player& player)
+{
+	BattleSequence battle;
+	battle.Battle(player);
+
+}
+
+
+void GameSession::GameLoop(Player& player)
+{
+	while (bIsLooping)
+	{
+		SafeZone(player);
+
+		if (bIsLooping)
+		{
+			BattleMode(player);
+			GEngine->ProcessDeferredDestruction();
+		}
+
+		GEngine->ProcessDeferredDestruction();
+	}
+}
 
 // Will become its own Namepsace
 void GameSession::SaveGame()

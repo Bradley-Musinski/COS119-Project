@@ -1,28 +1,30 @@
 #pragma once
-#include "Helper.h"
 
-class GameEngine;
+class Player;
 
 class GameSession
 {
 public:
-	GameSession(GameEngine& _engine)
-		: Engine(_engine)
+
+	GameSession() 
 	{}
 
 	void StartSession();
-	void SafeZone();
-	void BattleSequence();
+	void SafeZone(Player& player);
+	void BattleMode(Player& player);
 
-	void CreateCharacter();
+	void CreateCharacter(Player& player);
+
+	void GameLoop(Player& player);
 
 	bool GetIsNewGame() const { return bIsNewGame; }
 	void SetIsNewGame() { bIsNewGame = true; }
 
+	void RequestSessionEnd() { bIsLooping = false; }
+
 	void SaveGame();
 
 private:
-	GameEngine& Engine;
 
 	bool bIsNewGame = false;
 	bool bIsLooping = true;
