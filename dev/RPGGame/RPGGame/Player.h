@@ -27,6 +27,8 @@ public:
 		GEngine->RegisterActor(this);
 	};
 
+	void TakeTurn(Character c, const std::vector<Character*>& enemies);
+
 	void PrintStats() const override;
 
 private:

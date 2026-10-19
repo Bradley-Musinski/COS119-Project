@@ -9,8 +9,9 @@ public:
 	{
 		charStats.Name = "Kobald";
 		charStats.ClassName = "Enemy_Kobald";
-		charStats.Health = UMath::RandRange(6, 9);
-		charStats.Attack = UMath::RandRange(2, 5);
+		charStats.MaxHealth = UMath::RandRange(60, 75);
+		charStats.Health = charStats.MaxHealth;
+		charStats.Attack = UMath::RandRange(14, 17);
 		charStats.ArmorClass = UMath::RandRange(2, 5);
 		charStats.Stamina = UMath::RandRange(11, 15);
 		charStats.Exp = UMath::RandRange(10, 15);

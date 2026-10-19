@@ -12,8 +12,6 @@
 #include "Input.h"
 #include "Menus.h"
 
-Character* character = nullptr;
-
 // Destructor
 BattleSequence::~BattleSequence()
 {
@@ -41,7 +39,7 @@ void BattleSequence::Battle(Player& player)
 		GEngine->ProcessDeferredDestruction();
 
 		// Don't start another fight if the player is dead
-		if (!player.IsAlive(&player))
+		if (!player.IsAlive())
 		{
 			break;
 		}
@@ -132,7 +130,7 @@ void BattleSequence::CharacterStats(Player& player, const std::vector<Character*
 	std::vector<std::string> enemyLines;
 	for (Character* e : enemies)
 	{
-		if (character->IsAlive(e))
+		if (e->IsAlive())
 		{
 			enemyLines.push_back(e->charStats.Name + " | Health: " + std::to_string(e->charStats.Health));
 		}
@@ -177,6 +175,8 @@ void BattleSequence::DrawStatsAtTop(Player& player, const std::vector<Character*
 // Shows the battle options. Loops until the player picks something that uses their turn.
 void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& enemies)
 {
+	GEngine->TypeOut("It's your turn!", 30ms, 1000ms, Color::Green, 1);
+
 	while (true)
 	{
 		int BOM = Menus::BattleOptionsMenu();
@@ -185,7 +185,7 @@ void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& e
 		{
 			Character* target = ChooseTarget(enemies);   // player picks who to hit
 			player.playerLeaderboard.TotalDamageGiven += player.charStats.Attack;
-			Attack(&player, target, player.charStats.Attack);
+			player.Attack(&player, target, player.charStats.Attack);
 			return; // turn used
 		}
 		else if (BOM == 2)
@@ -207,7 +207,6 @@ void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& e
 // Runs the fight using the initiative order from RollForInitiative
 void BattleSequence::RunCombat(Player& player)
 {
-
 	// The other functions take Character*, so copy the Enemy* pointers into a Character* list
 	std::vector<Character*> enemies;
 
@@ -219,54 +218,55 @@ void BattleSequence::RunCombat(Player& player)
 	GEngine->ClearConsole();
 	GEngine->Print("<=><=><=><=><=> BATTLE START <=><=><=><=><=>", Color::BMagenta, 1);
 
-
 	int round = 1;
-	
-	while (character->IsAlive(&player) && character->AnyAlive(enemies))
+
+	while (player.IsAlive() && Character::AnyAlive(enemies))
 	{
 		GEngine->ClearConsole();
 
-		GEngine->Print("<=><=><=> CHARACTER STATS <=><=><=>" + std::to_string(round) + " ---", Color::Blue, 1);
+		GEngine->Print("<=><=><=><=><=><=><=> CHARACTER STATS <=><=><=><=><=><=><=>", Color::Blue, 2);
+
 		statsRow = GetCursorRow();          // remember where the panel starts
 		CharacterStats(player, enemies);
 
+		GEngine->Print("<=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=>", Color::Blue, 2);
+
 		GEngine->Print("--- Round " + std::to_string(round) + " ---", Color::Blue, 1);
-
-
 
 		for (Character* c : turnOrder)
 		{
-			if (!character->IsAlive(c))
+			if (!c->IsAlive())
 			{
 				continue; // dead characters skip their turn
 			}
 
+
 			if (c == &player)
 			{
-				PlayerTurn(player, enemies);
+
+				player.TakeTurn(player, enemies);
 			}
 			else
 			{
-				EnemyTurn(c, player);
+				static_cast<Enemy*>(c)->TakeTurn(player);
 			}
 
 			DrawStatsAtTop(player, enemies);
 
+
 			GEngine->WaitForKey();
 
 			// Stop as soon as one side is wiped out
-			if (!character->IsAlive(&player) || !character->AnyAlive(enemies))
+			if (!player.IsAlive() || !Character::AnyAlive(enemies))
 			{
 				break;
 			}
-
-
 		}
 
 		round++;
 	}
 
-	if (character->IsAlive(&player))
+	if (player.IsAlive())
 	{
 		GEngine->TypeOut("Victory! All enemies have been defeated!", 30ms, 1000ms, Color::Cyan, 1);
 		player.playerLeaderboard.TotalWins += 1;
@@ -293,7 +293,7 @@ Character* BattleSequence::ChooseTarget(const std::vector<Character*>& enemies) 
 
 	for (Character* e : enemies)
 	{
-		if (character->IsAlive(e))
+		if (e->IsAlive())
 		{
 			targets.push_back(e);
 		}
@@ -321,40 +321,32 @@ void BattleSequence::Abilities(Player& player, const std::vector<Character*>& en
 	for (int i = 0; i < abilityCount; i++)
 	{
 		GEngine->Print(std::to_string(i + 1) + ". " + player.charAbilities.abilities[i].Name
-			+ " | Damage: " + std::to_string(player.charAbilities.abilities[i].Damage), Color::White, 1);
+			+ " | Damage: " + std::to_string(player.charAbilities.abilities[i].MinDamage) + " - " + std::to_string(player.charAbilities.abilities[i].MaxDamage), Color::White, 1);
 	}
 
 	int spellChoice = Input::GetInput(">> ", 1, abilityCount);
-	int damage = player.charAbilities.abilities[spellChoice - 1].Damage;
+	
 
 	Character* target = ChooseTarget(enemies);
 
-	player.playerLeaderboard.TotalDamageGiven += damage;
-	Attack(&player, target, damage);
-}
 
-void BattleSequence::EnemyTurn(Character* enemy, Player& player)
-{
-	int healthBefore = player.charStats.Health;
-
-	Attack(enemy, &player, enemy->charStats.Attack);
-
-	// Count the damage actually taken (health can't go below 0)
-	player.playerLeaderboard.TotalDamageTaken += healthBefore - player.charStats.Health;
-}
-
-
-void BattleSequence::Attack(Character* attacker, Character* target, int damage)
-{
-	target->charStats.Health = UMath::Clamp(target->charStats.Health - damage, 0, target->charStats.MaxHealth);
-
-	GEngine->TypeOut(attacker->charStats.Name + " attacks " + target->charStats.Name
-		+ " for " + std::to_string(damage) + " damage!", 15ms, 500ms, Color::Gray, 1);
-
-	if (!character->IsAlive(target))
+	if (player.RollToHit(target))
 	{
-		GEngine->TypeOut(target->charStats.Name + " has been defeated!", 15ms, 500ms, Color::Red, 1);
+		int damage = UMath::RandRange(player.charAbilities.abilities[spellChoice - 1].MinDamage, player.charAbilities.abilities[spellChoice - 1].MaxDamage);
+
+		GEngine->Print(player.charAbilities.abilities[spellChoice - 1].Name + " hits " + target->charStats.Name
+			+ " for " + std::to_string(damage) + "!", Color::Green, 1);
+
+		player.playerLeaderboard.TotalDamageGiven += damage;
+		player.Attack(&player, target, damage);
 	}
+	else
+	{
+		GEngine->Print(player.charAbilities.abilities[spellChoice - 1].Name + " misses "
+			+ target->charStats.Name + "!", Color::Gray, 1);
+	}
+
+
 }
 
 short BattleSequence::GetCursorRow() const

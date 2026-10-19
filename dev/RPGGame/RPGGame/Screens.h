@@ -59,7 +59,6 @@ namespace Screens
         GEngine->Print("\t\t\t\t\t\t   - 4. Quit Game -", Color::Red, 1);
     }
 
-
     inline void BattleOptions()
     {
         GEngine->Print("Select an option:", Color::Green, 1);
