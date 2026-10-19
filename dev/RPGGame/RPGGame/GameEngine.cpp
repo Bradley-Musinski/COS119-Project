@@ -73,18 +73,25 @@ void GameEngine::ClearLastLine(int LineAmt)
 
 }
 
-void GameEngine::ClearConsole()
+void GameEngine::WaitForKey()
 {
+	Print("Press any key to continue...", Color::Gray);
 #ifdef _WIN32
-	system("cls"); // If the system is a windowOS then it calls this function
+	if (_getch()) // waits for any key instead
+	{
+		PrintBlankLines(1);
+	}
 #else
-	system("clear"); // If the system is not a windowOS (i.e. MacOS) then it calls this function
+	std::cin.get(); // waits for Enter instead
 #endif
 }
 
-void GameEngine::Continue()
+void GameEngine::ClearConsole()
 {
-	system("pause");
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
 }
-
 

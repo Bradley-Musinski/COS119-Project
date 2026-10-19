@@ -7,6 +7,7 @@ struct CharacterStats
 	std::string ClassName = "";
 	int Health = 0;
 	int Attack = 0;
+	int MaxHealth = 0;
 	int ArmorClass = 0;
 	int Stamina = 0;
 	int Exp = 0;
@@ -24,7 +25,8 @@ public:
 	{
 		charStats.Name = _name;
 		charStats.ClassName = _classname;
-		charStats.Health = _health;
+		charStats.Health = charStats.MaxHealth;
+		charStats.MaxHealth = _health;
 		charStats.Attack = _attack;
 		charStats.ArmorClass = _armorClass;
 		charStats.Stamina = _stamina;
@@ -32,8 +34,6 @@ public:
 	}
 
 	int RollInitiative();
-	void Attack(Character& character);
-	void TakeDamage(int _dmgAmt);
 
 	virtual void PrintStats() const;
 

@@ -14,6 +14,7 @@ public:
 
 private:
 	void LongRest(Player& player);
+	void PlayerLeaderboard(Player& player);
 
 	void PrintMenu() const;
 

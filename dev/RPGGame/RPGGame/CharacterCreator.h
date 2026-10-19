@@ -14,7 +14,9 @@ namespace CharacterCreator
 	void ApplyClass(Player& player, const CharacterTypes& charClass)
 	{
 		player.charStats.ClassName = charClass.Name;
-		player.charStats.Health = charClass.Health;
+		player.charStats.MaxHealth = charClass.Health;
+		player.charStats.Health = player.charStats.MaxHealth;
+		player.charStats.Attack = charClass.Attack;
 		player.charStats.ArmorClass = charClass.ArmorClass;
 		player.charStats.Stamina = charClass.Stamina;
 		player.charAbilities.abilities = charClass.charAbilties;

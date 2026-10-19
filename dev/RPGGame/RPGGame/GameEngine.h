@@ -81,8 +81,9 @@ public:
 	void ErrorMessage(std::string message);
 	void ClearLastLine(int LineAmt);
 
+	void WaitForKey();
 	void ClearConsole();
-	void Continue();
+
 
 
 private:

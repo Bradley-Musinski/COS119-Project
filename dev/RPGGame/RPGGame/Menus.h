@@ -14,7 +14,7 @@ namespace Menus
 {
 
     // Main Menu 
-    static int MainMenu()
+    inline int MainMenu()
     {
         bool bIsLooping = true;
 
@@ -25,13 +25,13 @@ namespace Menus
             Screens::MenuOptions();
 
             int MenuChoice = Input::GetInput("\t\t\t\t\t\t\t >> ", 1, 4);
-   
+
             switch (MenuChoice)
             {
             case 1:
                 GEngine->ClearConsole();
                 break;
-                
+
             case 2:
                 GEngine->ClearConsole();
                 break;
@@ -44,12 +44,11 @@ namespace Menus
                 GEngine->ClearConsole();
                 Screens::GoodbyeMessage();
                 bIsLooping = false;
-                
+
                 break;
 
             default:
                 GEngine->Print("ERROR: Invalid Choice...", Color::Red, 1);
-                GEngine->Continue();
                 GEngine->ClearConsole();
                 break;
             }
@@ -58,4 +57,30 @@ namespace Menus
             return MenuChoice;
         }
     }
+
+    inline int BattleOptionsMenu()
+    {
+        Screens::BattleOptions();
+
+        int userChoice = Input::GetInput(">> ", 1, 4);
+
+        switch (userChoice)
+        {
+        case 1: // Basic Attack
+            break;
+        case 2: // Abilities
+            break;
+        case 3: // Items
+            break;
+        case 4: // Flee
+            GEngine->ClearConsole();
+            break;
+        default:
+            break;
+        }
+
+        return userChoice;
+
+    }
+
 }

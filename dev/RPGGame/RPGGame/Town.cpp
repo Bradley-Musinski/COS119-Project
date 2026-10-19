@@ -5,8 +5,8 @@
 #include "Input.h"
 #include "UMath.h"
 
-Town::Town(GameSession& _session, Player& player)
-	: session(_session)
+Town::Town(GameSession& _session, Player& _player)
+	: session(_session), player(_player)
 {}
 
 void Town::TownArea()
@@ -31,25 +31,37 @@ void Town::TownArea()
 
 	while (bSafeZone)
 	{
-		int userInput = Input::GetInput(">> ", 1, 4);
+		int userInput = Input::GetInput(">> ", 1, 5);
 
 		switch (userInput)
 		{
 		case 1: // Shop - needs the inventory system first
 			GEngine->TypeOut("The shop is closed for now. Come back later!", 15ms, 1000ms, Color::Cyan, 1);
-			GEngine->ClearLastLine(1);
+			GEngine->ClearLastLine(2);
 			break;
 
 		case 2: // Long Rest - not implemented yet
-			GEngine->TypeOut("The inn isn't open yet.", 15ms, 1000ms, Color::Cyan, 1);
-			GEngine->ClearLastLine(1);
+			LongRest(player);
+			GEngine->ClearLastLine(2);
 			break;
-
+			
 		case 3:
-			bSafeZone = false;
+			PlayerLeaderboard(player);
 			break;
 
 		case 4:
+			if (player.charStats.Health <= 0) 
+			{
+				GEngine->Print("Your health is at 0! I recommend taking a long rest first!");
+			}
+			else
+			{
+				bSafeZone = false;
+			}
+
+			break;
+
+		case 5:
 			session.RequestSessionEnd();
 			bSafeZone = false;
 			break;
@@ -58,19 +70,36 @@ void Town::TownArea()
 
 	Input::FlushInput();
 }
-
+ 
 void Town::LongRest(Player& player)
 {
-	//player.charStats.Health = 
+	GEngine->TypeOut("Player has been fully healed!!", 15ms, 1000ms, Color::Cyan, 1);
+	player.charStats.Health = player.charStats.MaxHealth;
+	return;
+}
+
+void Town::PlayerLeaderboard(Player& player)
+{
+	GEngine->Print("<=><=><=><=><=> Player Leaderboard <=><=><=><=><=>", Color::Blue, 2);
+	GEngine->Print("Total Wins: " + std::to_string(player.playerLeaderboard.TotalWins), Color::Green, 1);
+	GEngine->Print("Total Loses: " + std::to_string(player.playerLeaderboard.TotalLoss), Color::Green, 1);
+	GEngine->Print("Total Damage Given: " + std::to_string(player.playerLeaderboard.TotalDamageGiven), Color::Green, 1);
+	GEngine->Print("Total Damage Recieved: " + std::to_string(player.playerLeaderboard.TotalDamageTaken), Color::Red, 1);
+
+
+	GEngine->WaitForKey();
+
+	TownArea();
 }
 
 void Town::PrintMenu() const
 {
 	GEngine->ClearConsole();
-	GEngine->Print("<=><=><=><=><=>" + currentTownName + "<=><=><=><=><=>", Color::Blue, 2);
+	GEngine->Print("<=><=><=><=><=> " + currentTownName + " <=><=><=><=><=>", Color::Blue, 2);
 	GEngine->TypeOut("Please select an option", 30ms, 1000ms, Color::Blue, 1);
 	GEngine->TypeOut("1. Shop", 1ms, 250ms, Color::White, 1);
 	GEngine->TypeOut("2. Long Rest", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("3. Exit Safe Zone", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("4. Main Menu", 1ms, 700ms, Color::White, 1);
+	GEngine->TypeOut("3. Player Leaderboard", 1ms, 250ms, Color::White, 1);
+	GEngine->TypeOut("4. Exit Safe Zone", 1ms, 250ms, Color::White, 1);
+	GEngine->TypeOut("5. Main Menu", 1ms, 700ms, Color::White, 1);
 }

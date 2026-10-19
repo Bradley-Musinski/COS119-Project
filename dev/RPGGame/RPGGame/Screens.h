@@ -6,7 +6,6 @@
 #include <conio.h>     // _kbhit / _getch
 #include <thread>
 #include "GameEngine.h"
-#include "Player.h"
 
 namespace Screens
 {
@@ -41,7 +40,7 @@ namespace Screens
 
         GEngine->Print("\t\t\t\t\t\t   Bradley Musinski", Color::Red, 2);
 
-        GEngine->Continue();
+        GEngine->WaitForKey();
         GEngine->ClearConsole();
     }
 
@@ -60,4 +59,12 @@ namespace Screens
         GEngine->Print("\t\t\t\t\t\t   - 4. Quit Game -", Color::Red, 1);
     }
 
-}
+
+    inline void BattleOptions()
+    {
+        GEngine->Print("Select an option:", Color::Green, 1);
+        GEngine->Print("- Basic Attack -", Color::White, 1);
+        GEngine->Print("- Abilities -", Color::White, 1);
+        GEngine->Print("- Items -", Color::White, 1);
+    }
+} 
