@@ -51,7 +51,7 @@ void BattleSequence::Battle(Player& player)
 void BattleSequence::CreateEnemies()
 {
 	// Randomly selects a number that ranges between the inputed values
-	int numOfEnemy = UMath::RandRange(1, 3); // Chooses a number between the given values that determine how many enemies the player will face
+	int numOfEnemy = UMath::RandRange(1, 2); // Chooses a number between the given values that determine how many enemies the player will face
 
 	for (int i = 0; i < numOfEnemy; i++)
 	{
@@ -161,11 +161,11 @@ void BattleSequence::DrawBattleScreen(Player& player, const std::vector<Characte
 {
 	GEngine->ClearConsole();
 
-	GEngine->Print("<=><=><=><=><=><=><=> CHARACTER STATS <=><=><=><=><=><=><=>", Color::Blue, 2);
+	GEngine->Print("<=><=><=><=><=><=><=> CHARACTER STATS <=><=><=><=><=><=><=>", Color::Gold, 2);
 	CharacterStats(player, enemies);
-	GEngine->Print("<=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=>", Color::Blue, 2);
+	GEngine->Print("<=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=><=>", Color::Gold, 2);
 
-	GEngine->Print("--- Round " + std::to_string(round) + " ---", Color::Blue, 1);
+	GEngine->Print("--- Round " + std::to_string(round) + " ---", Color::Gold, 1);
 }
 
 void BattleSequence::DrawStatsAtTop(Player& player, const std::vector<Character*>& enemies) const
