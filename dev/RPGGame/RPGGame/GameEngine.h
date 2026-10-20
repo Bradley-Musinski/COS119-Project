@@ -20,9 +20,11 @@ extern GameEngine* GEngine;
 enum class Color
 {
 	Red,
+	Dark_Red,
 	Blue,
 	Green,
 	Yellow,
+	Gold,
 	Brown,
 	Magenta,
 	BMagenta,
@@ -102,11 +104,17 @@ inline void GameEngine::Print(const T& message, Color color, int numOfBlankLines
 	case Color::Red:     
 		std::cout << "\033[31m"; 
 		break;
+	case Color::Dark_Red:
+		std::cout << "\033[36m";
+		break;
 	case Color::Green:   
 		std::cout << "\033[32m"; 
 		break;
 	case Color::Yellow:  
 		std::cout << "\033[33m"; 
+		break;
+	case Color::Gold:
+		std::cout << "\033[1;38;5;220m";
 		break;
 	case Color::Blue:    
 		std::cout << "\033[34m"; 

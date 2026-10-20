@@ -73,7 +73,7 @@ void Town::TownArea()
  
 void Town::LongRest(Player& player)
 {
-	GEngine->TypeOut("Player has been fully healed!!", 15ms, 1000ms, Color::Cyan, 1);
+	GEngine->TypeOut("For the night, you stayed at the local inn. Recovering all your strength!", 15ms, 1000ms, Color::Cyan, 1);
 	player.charStats.Health = player.charStats.MaxHealth;
 	return;
 }
@@ -89,17 +89,17 @@ void Town::PlayerLeaderboard(Player& player)
 
 	GEngine->WaitForKey();
 
-	TownArea();
+	GEngine->ClearLastLine(8);
 }
 
 void Town::PrintMenu() const
 {
 	GEngine->ClearConsole();
 	GEngine->Print("<=><=><=><=><=> " + currentTownName + " <=><=><=><=><=>", Color::Blue, 2);
-	GEngine->TypeOut("Please select an option", 30ms, 1000ms, Color::Blue, 1);
-	GEngine->TypeOut("1. Shop", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("2. Long Rest", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("3. Player Leaderboard", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("4. Exit Safe Zone", 1ms, 250ms, Color::White, 1);
-	GEngine->TypeOut("5. Main Menu", 1ms, 700ms, Color::White, 1);
+	GEngine->TypeOut("Please select an option", 15ms, 1000ms, Color::Blue, 1);
+	GEngine->TypeOut("1. Shop", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("2. Long Rest", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("3. Player Leaderboard", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("4. Exit Safe Zone", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("5. Main Menu", 1ms, 500ms, Color::White, 1);
 }

@@ -47,7 +47,7 @@ namespace CharacterCreator
 			const CharacterAbility& ability = charClass.charAbilties[i];
 
 			const std::string Effect =
-				ability.Damage > 0 ? "Damage " + std::to_string(ability.Damage) :
+				ability.MinDamage > 0 ? "Damage " + std::to_string(ability.MinDamage) + " - " + std::to_string(ability.MaxDamage) :
 				ability.Health > 0 ? "Heals " + std::to_string(ability.Health) :
 				ability.Armor > 0 ? "Armor +" + std::to_string(ability.Armor) :
 				"No effect";

@@ -9,8 +9,9 @@ public:
 	{
 		charStats.Name = "Goblin";
 		charStats.ClassName = "Enemy_Goblin";
-		charStats.Health = UMath::RandRange(6,9);
-		charStats.Attack = UMath::RandRange(3, 6);
+		charStats.MaxHealth = UMath::RandRange(35, 45);
+		charStats.Health = charStats.MaxHealth;
+		charStats.Attack = UMath::RandRange(8, 13);
 		charStats.ArmorClass = UMath::RandRange(2, 5);
 		charStats.Stamina = UMath::RandRange(11, 15);
 		charStats.Exp = UMath::RandRange(10, 15);
