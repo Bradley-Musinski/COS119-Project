@@ -24,7 +24,7 @@ After completing the above steps, feel free to begin updating this readme where 
 
 ### Bradley Musinski
 
-Hello my name is [Bradley Musinski]. I am a student from [Palm Bay, FL]. The purpose of this repository is to practice development using version control. This work will help me begin to build a portfolio of skills and accomplishment that can be shared in the future.
+Hello my name is Bradley Musinski. I am a student from Palm Bay, FL. The purpose of this repository is to practice development using version control. This work will help me begin to build a portfolio of skills and accomplishment that can be shared in the future.
 
 <br>
 
