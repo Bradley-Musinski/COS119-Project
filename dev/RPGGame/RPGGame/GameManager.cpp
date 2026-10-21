@@ -7,7 +7,6 @@ void GameManager::MainMenu()
 {
 	GameSession Session;
 
-
 	while (GEngine->IsRunning())
 	{
 		int MenuChoice = Menus::MainMenu();

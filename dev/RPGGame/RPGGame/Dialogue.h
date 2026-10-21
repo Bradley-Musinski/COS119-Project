@@ -23,17 +23,38 @@ namespace IntroLines
 
 namespace CharacterCreator
 {
-	inline constexpr  std::array<std::string_view, 2> Lines1 =
+	inline constexpr  std::array<std::string_view, 6> Lines1 =
 	{
-		"[BAP] Hello! Welcome to the Build-A-Player!",
-		"[BAP] I will walk you through the process of creating a new character!",
+		"[Narrator] The door creaks open and the chatter dies down as every eye turns to you...",
+		"[Innkeeper] Ah, a new face! Come in, come in! Don't be shy!",
+		"[Innkeeper] Welcome to The Last Ember.",
+		"[Innkeeper] My name is Godwin. I'm the owner of this inn.",
+		"[Narrator] Godwin yells to one of his staff to bring you a drink.",
+		"[Godwin] So tell me. What's your name friend?",
+	};
+
+	inline constexpr std::array<std::string_view, 6> Lines2 =
+	{
+		"[Godwin] Ah, what a fitting name for a legend!",
+		"[Narrator] A barmaid sets a frothy mug in front of you.",
+		"[Godwin] So tell me, what brings you to The Last Ember?",
+		"[Godwin] Hmmm...",
+		"[Godwin] You don't look like a farmer. So what's your trade?",
+		"[Godwin] Are you handy with a blade, a bow, or perhaps... magic?"
+	};
+
+	inline constexpr std::array<std::string_view, 3> SoliderLines =
+	{
+		"[Godwin] Oh, you're a solider?",
+		"[Narrator] Godwin chuckles...",
+		"[Godwin] Well, nothing beats a good sword and a steady arm!"
 	};
 
 }
 
 namespace Dialogue
 {
-	void CharacterCreateDialogue()
+	void CharacterCreateDialogue1()
 	{
 		for (const auto& line : CharacterCreator::Lines1)
 		{
@@ -41,6 +62,21 @@ namespace Dialogue
 		}
 	}
 
+	void CharacterCreateDialogue2()
+	{
+		for (const auto& line : CharacterCreator::Lines2)
+		{
+			GEngine->TypeOut(line, 30ms, 1s, Color::Cyan, 1);
+		}
+	}
+
+	void CharacterSoldierDialogue1()
+	{
+		for (const auto& line : CharacterCreator::SoliderLines)
+		{
+			GEngine->TypeOut(line, 30ms, 1s, Color::Cyan, 1);
+		}
+	}
 
 	void Intro()
 	{

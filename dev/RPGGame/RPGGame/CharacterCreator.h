@@ -68,13 +68,11 @@ namespace CharacterCreator
 
 	void CreateName(Player& player)
 	{
-		GEngine->ClearConsole();
 
-		GEngine->Print("  ##================================##", Color::BMagenta, 1);
-		GEngine->Print("             CREATE YOUR HERO", Color::BMagenta, 1);
-		GEngine->Print("  ##================================##", Color::BMagenta, 2);
+		Dialogue::CharacterCreateDialogue1();
 
-		GEngine->TypeOut("[BAP] Every legend needs a name. What's yours?", 30ms, 1s, Color::Cyan, 2);
+		GEngine->PrintBlankLines(1);
+		GEngine->Print("Enter your name...", Color::White, 1);
 		GEngine->Print(">> ", Color::White, 0);
 
 		Input::FlushInput();
@@ -97,7 +95,11 @@ namespace CharacterCreator
 		GEngine->Print("##================================##", Color::BMagenta, 1);
 		GEngine->Print("	   Select a Class", Color::BMagenta, 1);
 		GEngine->Print("##================================##", Color::BMagenta, 1);
-		GEngine->TypeOut("[BAP] Now, " + player.charStats.Name + ", let's select your class.", 30ms, 1s, Color::Cyan, 2);
+
+		Dialogue::CharacterCreateDialogue2();
+
+		GEngine->PrintBlankLines(1);
+		GEngine->Print("Select A Class from the Options Below: ", Color::White, 1);
 
 		GEngine->TypeOut("1. " + Warlock.Name +
 			"\tHealth: " + std::to_string(Warlock.Health) +
@@ -163,8 +165,6 @@ namespace CharacterCreator
 		else
 		{
 			GEngine->PrintBlankLines(1);
-			GEngine->TypeOut("[BAP] A Soldier! Nothing beats a good sword and a steady arm.", 30ms, 1s, Color::Cyan, 1);
-			GEngine->TypeOut("[BAP] Solid choice!", 30ms, 1s, Color::Cyan, 2);
 
 			PrintStats(Soldier);
 
@@ -178,6 +178,9 @@ namespace CharacterCreator
 			{
 				std::cin.ignore();
 				ApplyClass(player, Soldier);
+				GEngine->ClearConsole();
+
+				Dialogue::CharacterSoldierDialogue1();
 			}
 			else if (userChoice == 'N' or userChoice == 'n')
 			{
@@ -217,7 +220,7 @@ namespace CharacterCreator
 				}
 			}
 
-			GEngine->TypeOut("[BAP] So your name is " + inputName + "? (Y/N)", 30ms, 1s, Color::Cyan, 1);
+			GEngine->TypeOut("So your name is " + inputName + "? (Y/N)", 30ms, 1s, Color::White, 1);
 			GEngine->Print(" >> ", Color::White, 0);
 
 			Input::FlushInput();
@@ -230,14 +233,11 @@ namespace CharacterCreator
 			if (userChoice == 'Y' or userChoice == 'y')
 			{
 				std::cin.ignore();
-
-				GEngine->TypeOut("[BAP] Ah, " + inputName + "! What a fitting name for a legend!", 30ms, 1s, Color::Cyan, 1);
 				player.Name(inputName); // Sets the inputted name to the character's name located in the struct CharacterStats
 			}
 			else if (userChoice == 'N' or userChoice == 'n')
 			{
 				std::cin.ignore();
-
 				CreateName(player);// Recursively restarts name creation if the input is 'N'
 
 			}
@@ -271,10 +271,12 @@ namespace CharacterCreator
 
 	void CreateCharacter(Player& player)
 	{
-		Dialogue::CharacterCreateDialogue();
+		GEngine->Print("  ##================================##", Color::BMagenta, 1);
+		GEngine->Print("             CREATE YOUR HERO", Color::BMagenta, 1);
+		GEngine->Print("  ##================================##", Color::BMagenta, 2);
+		
 		CreateName(player);
 		SelectClass(player);
-		ShowStats(player);
 
 		GEngine->ClearConsole();
 	}

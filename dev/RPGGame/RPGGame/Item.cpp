@@ -1,4 +1,4 @@
 #include "Item.h"
 
-void Item::Use()
+void Item::UseItem(Item& item)
 {}

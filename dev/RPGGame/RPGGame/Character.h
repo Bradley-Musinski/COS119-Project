@@ -1,5 +1,12 @@
 #pragma once
+#include "GameEngine.h"
+#include "UMath.h"
 #include "AActor.h"
+#include "Character.h"
+#include "Item.h"
+#include "Inventory.h"
+#include "Screens.h"
+#include "Abilties.h"
 
 struct CharacterStats
 {
@@ -16,7 +23,6 @@ struct CharacterStats
 class Character : public AActor
 {
 public:
-
 	CharacterStats charStats;
 
 	Character() = default;
@@ -47,8 +53,9 @@ public:
 	bool IsAlive() const;
 	static bool AnyAlive(const std::vector<Character*>& characters) ;
 
-private:
+	Inventory character;
 
+private:
 	int initiative = 0;
 };
 

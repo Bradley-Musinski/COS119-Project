@@ -88,10 +88,6 @@ void GameEngine::WaitForKey()
 
 void GameEngine::ClearConsole()
 {
-#ifdef _WIN32
-	system("cls");
-#else
-	system("clear");
-#endif
+	std::cout << "\033[2J\033[3J\033[H";
 }
 

@@ -49,6 +49,7 @@ private:
 	"Halfway-to-Somewhere",
 	"Bard's Last Gig"
 	}; // keep your existing names here
+
 	std::string currentTownName;
 	bool bSafeZone = true;
 };
