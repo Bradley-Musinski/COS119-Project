@@ -2,7 +2,6 @@
 #include "BattleSequence.h"
 #include "Screens.h"
 
-
 void Player::TakeTurn(Character c, const std::vector<Character*>& enemies)
 {
 	BattleSequence battle;
@@ -46,4 +45,18 @@ void Player::PrintStats() const
 
 	GEngine->PrintBlankLines(1);
 	GEngine->Print(border, Color::BMagenta, 2);
+}
+
+void Player::StartingInvetory()
+{
+	
+	character.SetGold(100);
+
+	std::vector<Item> PlayerStarterItems = { ItemFactory::HealthPotion()};
+
+	for (int i = 0; i < PlayerStarterItems.size(); i++)
+	{
+		character.Additem(PlayerStarterItems[i]);
+	}
+
 }

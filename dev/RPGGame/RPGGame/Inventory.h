@@ -18,13 +18,13 @@ public:
 	bool RemoveItem(const Item& ItemToRemove);
 	bool bIsEmpty() const { return ItemData.ItemData.ItemID == 0; }
 
-	std::vector<Item> GetInventory()
+	std::vector<Item> GetItems()
 	{
 		return Items;
 	}
 
 	int GetGold() const { return Gold; }
-	int SetGold(int _Gold) { Gold = _Gold; }
+	void SetGold(int _Gold) { Gold = _Gold; }
 
 private:
 	int Gold;

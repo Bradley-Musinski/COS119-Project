@@ -31,5 +31,8 @@ public:
 
 	void PrintStats() const override;
 
+	void StartingInvetory();
+	std::vector<Item> items;
+
 };
 

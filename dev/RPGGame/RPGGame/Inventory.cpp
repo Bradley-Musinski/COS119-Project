@@ -15,16 +15,15 @@ Item* Inventory::GetItem(const std::string& ItemName)
 
 bool Inventory::Additem(const Item& NewItem)
 {
-	for (Item& slot : Items)
+	const size_t MaxItems = 20;
+
+	if (Items.size() >= MaxItems)
 	{
-		if (bIsEmpty())
-		{
-			slot = NewItem;
-			return true;
-		}
+		return false;   // bag is full
 	}
 
-	return false;   // inventory full
+	Items.push_back(NewItem);
+	return true;
 }
 
 bool Inventory::RemoveItem(const Item& ItemToRemove)

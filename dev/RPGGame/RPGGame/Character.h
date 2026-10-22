@@ -4,6 +4,7 @@
 #include "AActor.h"
 #include "Character.h"
 #include "Item.h"
+#include "ItemFactory.h"
 #include "Inventory.h"
 #include "Screens.h"
 #include "Abilties.h"
@@ -53,7 +54,7 @@ public:
 	bool IsAlive() const;
 	static bool AnyAlive(const std::vector<Character*>& characters) ;
 
-	Inventory CharacterInventory;
+	Inventory character;
 
 private:
 	int initiative = 0;

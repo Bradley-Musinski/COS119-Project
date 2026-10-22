@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "CharacterTypes.h"
 
+
 using namespace std::chrono_literals;
 
 namespace CharacterCreator
@@ -277,6 +278,7 @@ namespace CharacterCreator
 		
 		CreateName(player);
 		SelectClass(player);
+		player.StartingInvetory();
 
 		GEngine->ClearConsole();
 	}
