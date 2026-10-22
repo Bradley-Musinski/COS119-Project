@@ -53,7 +53,7 @@ public:
 	bool IsAlive() const;
 	static bool AnyAlive(const std::vector<Character*>& characters) ;
 
-	Inventory character;
+	Inventory CharacterInventory;
 
 private:
 	int initiative = 0;

@@ -31,8 +31,5 @@ public:
 
 	void PrintStats() const override;
 
-private:
-
-
 };
 
