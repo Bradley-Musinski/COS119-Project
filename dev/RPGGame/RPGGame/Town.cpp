@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "Player.h"
 #include "Input.h"
+#include "SaveSystem.h"
 #include "UMath.h"
 
 Town::Town(GameSession& _session, Player& _player)
@@ -80,6 +81,9 @@ void Town::TownArea()
 			break;
 		case 6:
 			session.RequestSessionEnd();
+			SaveSystem::SaveGame(player);
+			GEngine->ClearConsole();
+			Input::FlushInput();
 			bSafeZone = false;
 			break;
 		default:

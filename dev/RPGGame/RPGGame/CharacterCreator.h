@@ -1,4 +1,5 @@
 #pragma once
+#include "SaveSystem.h"
 #include "Player.h"
 #include "Dialogue.h"
 #include "Input.h"
@@ -279,6 +280,7 @@ namespace CharacterCreator
 		CreateName(player);
 		SelectClass(player);
 		player.StartingInvetory();
+		SaveSystem::SaveGame(player);
 
 		GEngine->ClearConsole();
 	}

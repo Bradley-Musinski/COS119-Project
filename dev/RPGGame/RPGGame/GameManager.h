@@ -7,7 +7,7 @@ public:
 	
 	void MainMenu();
 
-	void LoadGame();
+	std::string LoadGame();
 	
 
 private:

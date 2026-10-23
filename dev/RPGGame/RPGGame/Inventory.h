@@ -26,9 +26,8 @@ public:
 	int GetGold() const { return Gold; }
 	void SetGold(int _Gold) { Gold = _Gold; }
 
-private:
+	std::vector<Item> Items;
 	int Gold;
 
-	std::vector<Item> Items;
 };
 

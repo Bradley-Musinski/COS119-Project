@@ -1,0 +1,51 @@
+Sir Henry VI
+Soldier
+120
+120
+16
+6
+20
+0
+0
+0
+0
+0
+100
+1
+Health Potion
+1
+10
+1
+999
+2
+50
+2
+4
+Power Strike
+A heavy, two-handed swing that cleaves through armor
+12
+16
+0
+0
+5
+Shield Bash
+Slams the enemy with a shield, leaving them reeling
+16
+0
+0
+0
+3
+Rallying Cry
+A battle shout that steels the Soldier's resolve and mends wounds
+0
+0
+8
+2
+4
+Relentless Assault
+A furious flurry of strikes that gives the enemy no room to breathe
+14
+22
+0
+0
+9

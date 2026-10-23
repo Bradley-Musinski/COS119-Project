@@ -22,7 +22,7 @@ public:
 	CharacterAbilities charAbilities;
 	PlayerLeaderboard playerLeaderboard;
 
-	Player() 
+	Player()
 	{
 		GEngine->RegisterActor(this);
 	};

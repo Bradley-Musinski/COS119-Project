@@ -19,6 +19,6 @@ void Enemy::TakeTurn(Player& player)
 	}
 	else
 	{
-		GEngine->Print(charStats.Name + " misses you!", Color::Gray, 1);
+		GEngine->Print("::" + charStats.Name + " misses you! ::", Color::Gray, 1);
 	}
 }

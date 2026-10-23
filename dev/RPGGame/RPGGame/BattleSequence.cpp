@@ -191,15 +191,16 @@ void BattleSequence::DrawStatsAtTop(Player& player, const std::vector<Character*
 // Shows the battle options. Loops until the player picks something that uses their turn.
 void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& enemies)
 {
+	Input::FlushInput();
 	GEngine->TypeOut(":: It's your turn! ::", 30ms, 1000ms, Color::Green, 1);
 
 	while (true)
 	{
 
 		GEngine->TypeOut(":: Type an Option from Below ::", 30ms, 1000ms, Color::Green, 1);
-		GEngine->TypeOut("Basic Attack", 1ms, 1ms, Color::Green, 1);
-		GEngine->TypeOut("Abilties", 1ms, 1ms, Color::Green, 1);
-		GEngine->TypeOut("Bag", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut(": Basic Attack", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut(": Abilties", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut(": Bag", 1ms, 1ms, Color::Green, 1);
 		GEngine->TypeOut(">> ", 1ms, 1ms, Color::White, 0);
 
 		std::string BOM;
@@ -391,8 +392,6 @@ bool BattleSequence::Bag(Player& player)
 		GEngine->PrintBlankLines(1);
 	}
 
-	GEngine->Print(":: Would you like to use an item? ::", Color::Green, 1);
-
 	while (true)
 	{
 		GEngine->Print(":: Which Item Would You Like to Use? (type the item you wish to use or 'back' to cancel) ::", Color::Green, 1);
@@ -407,7 +406,7 @@ bool BattleSequence::Bag(Player& player)
 
 		if (typed == "back")
 		{
-			GEngine->ClearLastLine(9);
+			GEngine->ClearLastLine(9 + static_cast<int>(ItemList.size()));
 			return false;
 		}
 
