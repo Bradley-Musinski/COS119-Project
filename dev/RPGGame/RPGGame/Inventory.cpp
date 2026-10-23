@@ -15,24 +15,45 @@ Item* Inventory::GetItem(const std::string& ItemName)
 
 bool Inventory::Additem(const Item& NewItem)
 {
-	const size_t MaxItems = 20;
+	const int MaxItems = 20;
+
+	// If it stacks and we already have one, just add to the count
+	if (NewItem.ItemData.bIsStackable)
+	{
+		for (Item& item : Items)
+		{
+			if (item.ItemData.ItemID == NewItem.ItemData.ItemID)
+			{
+				item.ItemData.NumStack += 1;
+				return true;
+			}
+		}
+	}
 
 	if (Items.size() >= MaxItems)
 	{
 		return false;   // bag is full
 	}
 
-	Items.push_back(NewItem);
+	Item item = NewItem;
+	item.ItemData.NumStack = 1;
+	Items.push_back(item);
 	return true;
 }
 
 bool Inventory::RemoveItem(const Item& ItemToRemove)
 {
-	for (Item& slot : Items)
+	for (int i = 0; i < Items.size(); i++)
 	{
-		if (slot.ItemData.ItemID == ItemToRemove.ItemData.ItemID)
+		if (Items[i].ItemData.ItemID == ItemToRemove.ItemData.ItemID)
 		{
-			slot = Item();   // reset to empty
+			Items[i].ItemData.NumStack -= 1;
+
+			if (Items[i].ItemData.NumStack <= 0)
+			{
+				Items.erase(Items.begin() + i);
+			}
+
 			return true;
 		}
 	}

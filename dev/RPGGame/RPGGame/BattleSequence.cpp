@@ -11,6 +11,9 @@
 #include "Kobald.h"
 #include "Input.h"
 #include "Menus.h"
+#include <thread>
+
+using namespace std::chrono_literals;
 
 // Destructor
 BattleSequence::~BattleSequence()
@@ -188,31 +191,46 @@ void BattleSequence::DrawStatsAtTop(Player& player, const std::vector<Character*
 // Shows the battle options. Loops until the player picks something that uses their turn.
 void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& enemies)
 {
-	GEngine->TypeOut("It's your turn!", 30ms, 1000ms, Color::Green, 1);
+	GEngine->TypeOut(":: It's your turn! ::", 30ms, 1000ms, Color::Green, 1);
 
 	while (true)
 	{
-		int BOM = Menus::BattleOptionsMenu();
 
-		if (BOM == 1)
+		GEngine->TypeOut(":: Type an Option from Below ::", 30ms, 1000ms, Color::Green, 1);
+		GEngine->TypeOut("Basic Attack", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut("Abilties", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut("Bag", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut(">> ", 1ms, 1ms, Color::White, 0);
+
+		std::string BOM;
+		getline(std::cin, BOM);
+
+		GEngine->PrintBlankLines(1);
+
+		if (BOM == "Basic Attack")
 		{
 			Character* target = ChooseTarget(enemies);   // player picks who to hit
 			player.playerLeaderboard.TotalDamageGiven += player.charStats.Attack;
 			player.Attack(&player, target, player.charStats.Attack);
 			return; // turn used
 		}
-		else if (BOM == 2)
+		else if (BOM == "Abilities")
 		{
 			Abilities(player, enemies);   // Abilities picks the target itself
 			return; // turn used
 		}
-		else if (BOM == 4)
+		else if (BOM == "Bag")
 		{
+			if (Bag(player))
+			{
+				return; // item used, turn over
+			}
 		}
 		else
 		{
-			// Options 3 and 4 aren't built yet, so show the menu again
-			GEngine->Print("That option isn't available yet.", Color::Gray, 1);
+			GEngine->ErrorMessage("ERROR: Please choose an option from above");
+			std::this_thread::sleep_for(2s);
+			GEngine->ClearLastLine(5);
 		}
 	}
 }
@@ -271,12 +289,12 @@ void BattleSequence::RunCombat(Player& player)
 
 	if (player.IsAlive())
 	{
-		GEngine->TypeOut("Victory! All enemies have been defeated!", 30ms, 1000ms, Color::Cyan, 1);
+		GEngine->TypeOut(" :: Victory! All enemies have been defeated! ::", 30ms, 1000ms, Color::Cyan, 1);
 		player.playerLeaderboard.TotalWins += 1;
 	}
 	else
 	{
-		GEngine->TypeOut("You have fallen...", 30ms, 1000ms, Color::Red, 1);
+		GEngine->TypeOut(":: You have fallen... ::", 30ms, 1000ms, Color::Red, 1);
 		player.playerLeaderboard.TotalLoss += 1;
 	}
 
@@ -296,7 +314,7 @@ Character* BattleSequence::ChooseTarget(const std::vector<Character*>& enemies) 
 		}
 	}
 
-	GEngine->Print("Choose a target:", Color::White, 1);
+	GEngine->Print(":: Choose a Target by Entering the Number Next to the Enemy ::", Color::White, 1);
 
 	for (size_t i = 0; i < targets.size(); i++)
 	{
@@ -311,7 +329,7 @@ Character* BattleSequence::ChooseTarget(const std::vector<Character*>& enemies) 
 void BattleSequence::Abilities(Player& player, const std::vector<Character*>& enemies)
 {
 	// 1. Pick a spell
-	GEngine->Print("Choose an Ability:", Color::White, 1);
+	GEngine->Print(":: Choose an Ability ::", Color::White, 1);
 
 	int abilityCount = static_cast<int>(player.charAbilities.abilities.size());
 
@@ -340,11 +358,75 @@ void BattleSequence::Abilities(Player& player, const std::vector<Character*>& en
 	}
 	else
 	{
-		GEngine->Print(player.charAbilities.abilities[spellChoice - 1].Name + " misses "
-			+ target->charStats.Name + "!", Color::Gray, 1);
+		GEngine->Print(":: " + player.charAbilities.abilities[spellChoice - 1].Name + " misses "
+			+ target->charStats.Name + "! ::", Color::Gray, 1);
 	}
 
 
+}
+
+bool BattleSequence::Bag(Player& player)
+{
+	const std::vector<Item>& ItemList = player.character.GetItems();
+
+	if (ItemList.empty())
+	{
+		GEngine->Print(":: Your inventory is empty ::", Color::White, 1);
+		system("pause");
+		return false;
+	}
+
+	for (int i = 0; i < ItemList.size(); i++)
+	{
+		std::string LastItemName = ItemList[i].ItemData.ItemName;
+
+		GEngine->Print(ItemList[i].ItemData.ItemName + " | " + std::to_string(ItemList[i].ItemData.NumStack), Color::White);
+
+		if (ItemList[i].ItemData.ItemName == LastItemName && ItemList[i].ItemData.bIsStackable)
+		{
+			GEngine->Print(" | Restores " + std::to_string(ItemList[i].ItemData.Amount) + "hp", Color::White);
+		}
+
+
+		GEngine->PrintBlankLines(1);
+	}
+
+	GEngine->Print(":: Would you like to use an item? ::", Color::Green, 1);
+
+	while (true)
+	{
+		GEngine->Print(":: Which Item Would You Like to Use? (type the item you wish to use or 'back' to cancel) ::", Color::Green, 1);
+
+		std::string typed;
+		std::getline(std::cin, typed);
+
+		if (typed.empty())
+		{
+			continue;
+		}
+
+		if (typed == "back")
+		{
+			GEngine->ClearLastLine(9);
+			return false;
+		}
+
+		for (const Item& item : ItemList)
+		{
+			if (item.ItemData.ItemName == typed)
+			{
+				Item usedItem = item;
+				usedItem.UseItem(player);
+				player.character.RemoveItem(usedItem);
+				system("pause");
+				return true;
+			}
+		}
+
+		GEngine->Print(":: You don't have that item. ::", Color::Red, 1);
+	}
+
+	system("pause");
 }
 
 short BattleSequence::GetCursorRow() const

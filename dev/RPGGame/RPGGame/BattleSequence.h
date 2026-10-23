@@ -20,7 +20,7 @@ private:
 	void DrawBattleScreen(Player& player, const std::vector<Character*>& enemies, int round) const;
 	void DrawStatsAtTop(Player& player, const std::vector<Character*>& enemies) const;
 	void Abilities(Player& player, const std::vector<Character*>& enemies);
-
+	bool Bag(Player& player);
 
 	short statsRow = 0; // console row where the stats panel starts
 

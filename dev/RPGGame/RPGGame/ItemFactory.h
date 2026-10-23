@@ -7,7 +7,7 @@ namespace ItemFactory
 	{
 		Item item;
 		item.ItemData.ItemName = "Health Potion";
-		item.ItemData.ItemID = 001;
+		item.ItemData.ItemID = 1;
 		item.ItemData.ItemValue = 50;
 		item.ItemData.bIsStackable = true;
 		item.ItemData.MaxStack = 999;

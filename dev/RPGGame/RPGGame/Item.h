@@ -41,7 +41,7 @@ public:
 		ItemData.Type = ItemType::Misc;
 	}
 
-	virtual void UseItem(Item& item, Character& character);
+	void UseItem(Character& character);
 
 };
 

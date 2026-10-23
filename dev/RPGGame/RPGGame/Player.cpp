@@ -52,7 +52,7 @@ void Player::StartingInvetory()
 	
 	character.SetGold(100);
 
-	std::vector<Item> PlayerStarterItems = { ItemFactory::HealthPotion()};
+	std::vector<Item> PlayerStarterItems = { ItemFactory::HealthPotion(), ItemFactory::HealthPotion()};
 
 	for (int i = 0; i < PlayerStarterItems.size(); i++)
 	{
