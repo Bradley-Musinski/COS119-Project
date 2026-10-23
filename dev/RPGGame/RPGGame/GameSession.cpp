@@ -1,7 +1,8 @@
 #include <thread>
-#include "Input.h"
-#include "GameSession.h"
 #include "GameEngine.h"
+#include "GameSession.h"
+#include "SaveSystem.h"
+#include "Input.h"
 #include "CharacterCreator.h"
 #include "BattleSequence.h"
 #include "Town.h"
@@ -12,6 +13,8 @@
 
 void GameSession::StartSession()
 {
+	bIsLooping = true;
+
 	Player* player = new Player();
 
 	if (bIsNewGame)
@@ -23,7 +26,9 @@ void GameSession::StartSession()
 	}
 	else
 	{
+		SaveSystem::LoadPlayer(*player, saveFile);
 		GEngine->Print("Player Data Loaded!", Color::Red, 1);
+		std::this_thread::sleep_for(2s);
 	}
 
 	GameLoop(*player);
@@ -66,6 +71,7 @@ void GameSession::GameLoop(Player& player)
 		}
 
 		GEngine->ProcessDeferredDestruction();
+		SaveSystem::SaveGame(player);
 	}
 }
 

@@ -55,4 +55,4 @@ For Week 3, my main focus will be implementing the inventory, item, and store sy
 
 ### Week 4
 
-My final stand up...
+This week I finished the shop, added using items during battle, and built a save/load system that keeps the player's stats, gold, inventory and abilities between sessions. The hardest part was getting saves to load correctly, since items were being saved from the wrong list and missing data, but checking the save file and adding debug prints helped me track it down. I'm now polishing the UI and fixing bugs before turning it in, and if I kept going, I'd add autosaving, working healing and armor abilities, and more content like equipment and enemies.

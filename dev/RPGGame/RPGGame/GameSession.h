@@ -23,10 +23,11 @@ public:
 	void RequestSessionEnd() { bIsLooping = false; }
 
 	void SaveGame();
+	void SetSaveFile(std::string file) { saveFile = file; }
 
 private:
-
+	std::string saveFile = "";
 	bool bIsNewGame = false;
-	bool bIsLooping = true;
+	bool bIsLooping;
 };
 

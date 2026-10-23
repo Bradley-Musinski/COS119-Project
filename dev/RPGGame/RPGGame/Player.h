@@ -22,7 +22,7 @@ public:
 	CharacterAbilities charAbilities;
 	PlayerLeaderboard playerLeaderboard;
 
-	Player() 
+	Player()
 	{
 		GEngine->RegisterActor(this);
 	};
@@ -31,8 +31,8 @@ public:
 
 	void PrintStats() const override;
 
-private:
-
+	void StartingInvetory();
+	std::vector<Item> items;
 
 };
 

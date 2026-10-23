@@ -1,9 +1,11 @@
 #include "Town.h"
 #include "GameEngine.h"
 #include "GameSession.h"
-#include "Player.h"
 #include "Input.h"
+#include "SaveSystem.h"
 #include "UMath.h"
+#include "Player.h"
+#include "Store.h"
 
 Town::Town(GameSession& _session, Player& _player)
 	: session(_session), player(_player)
@@ -12,7 +14,7 @@ Town::Town(GameSession& _session, Player& _player)
 void Town::TownArea()
 {
 	bSafeZone = true; // reset every time we enter town
-
+	
 	// Pick a name once and keep it for later visits
 	if (currentTownName.empty())
 	{
@@ -31,25 +33,55 @@ void Town::TownArea()
 
 	while (bSafeZone)
 	{
-		int userInput = Input::GetInput(">> ", 1, 5);
+		int userInput = Input::GetInput(">> ", 1, 6);
 
 		switch (userInput)
 		{
 		case 1: // Shop - needs the inventory system first
-			GEngine->TypeOut("The shop is closed for now. Come back later!", 15ms, 1000ms, Color::Cyan, 1);
-			GEngine->ClearLastLine(2);
+			Store store;
+			store.OpenStore(player);
+			PrintMenu();
 			break;
-
-		case 2: // Long Rest - not implemented yet
+		case 2:
 			LongRest(player);
 			GEngine->ClearLastLine(2);
 			break;
-			
 		case 3:
+		{
+			const std::vector<Item>& ItemList = player.character.GetItems();
+
+			GEngine->Print("Gold: " + std::to_string(player.character.GetGold()), Color::Gold, 1);
+
+			if (ItemList.empty())
+			{
+				GEngine->Print("Your inventory is empty.", Color::White, 1);
+			}
+			else
+			{
+				for (int i = 0; i < ItemList.size(); i++)
+				{
+					std::string LastItemName = ItemList[i].ItemData.ItemName;
+
+					GEngine->Print(ItemList[i].ItemData.ItemName + " | " + std::to_string(ItemList[i].ItemData.NumStack), Color::White);
+
+					if (ItemList[i].ItemData.ItemName == LastItemName && ItemList[i].ItemData.bIsStackable)
+					{
+						GEngine->Print(" | Restores " + std::to_string(ItemList[i].ItemData.Amount) + "hp", Color::White);
+					}
+
+
+					GEngine->PrintBlankLines(1);
+				}
+			}
+
+			GEngine->WaitForKey();
+			PrintMenu();   // redraw the town menu
+			break;
+		}
+		case 4:
 			PlayerLeaderboard(player);
 			break;
-
-		case 4:
+		case 5:
 			if (player.charStats.Health <= 0) 
 			{
 				GEngine->Print("Your health is at 0! I recommend taking a long rest first!");
@@ -58,12 +90,15 @@ void Town::TownArea()
 			{
 				bSafeZone = false;
 			}
-
 			break;
-
-		case 5:
+		case 6:
 			session.RequestSessionEnd();
+			SaveSystem::SaveGame(player);
+			GEngine->ClearConsole();
+			Input::FlushInput();
 			bSafeZone = false;
+			break;
+		default:
 			break;
 		}
 	}
@@ -99,7 +134,8 @@ void Town::PrintMenu() const
 	GEngine->TypeOut("Please select an option", 15ms, 1000ms, Color::Blue, 1);
 	GEngine->TypeOut("1. Shop", 1ms, 100ms, Color::White, 1);
 	GEngine->TypeOut("2. Long Rest", 1ms, 100ms, Color::White, 1);
-	GEngine->TypeOut("3. Player Leaderboard", 1ms, 100ms, Color::White, 1);
-	GEngine->TypeOut("4. Exit Safe Zone", 1ms, 100ms, Color::White, 1);
-	GEngine->TypeOut("5. Main Menu", 1ms, 500ms, Color::White, 1);
+	GEngine->TypeOut("3. Your Bag", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("4. Player Leaderboard", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("5. Exit Safe Zone", 1ms, 100ms, Color::White, 1);
+	GEngine->TypeOut("6. Main Menu", 1ms, 500ms, Color::White, 1);
 }

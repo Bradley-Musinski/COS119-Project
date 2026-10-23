@@ -151,8 +151,8 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Kobald.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Potions.cpp" />
     <ClCompile Include="RPGGame.cpp" />
+    <ClCompile Include="Store.cpp" />
     <ClCompile Include="Town.cpp" />
     <ClCompile Include="Skeleton.cpp" />
   </ItemGroup>
@@ -171,10 +171,11 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemFactory.h" />
     <ClInclude Include="Kobald.h" />
     <ClInclude Include="Menus.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Potions.h" />
+    <ClInclude Include="Store.h" />
     <ClInclude Include="Town.h" />
     <ClInclude Include="SaveSystem.h" />
     <ClInclude Include="Screens.h" />

@@ -1,0 +1,51 @@
+Merlin
+Warlock
+100
+100
+12
+4
+15
+0
+0
+0
+0
+0
+100
+1
+Health Potion
+1
+10
+1
+999
+2
+50
+2
+4
+Eldritch Blast
+A Crackling beam of dark energy
+12
+16
+0
+0
+5
+Hex
+A whispered curse that makes the target suffer with every turn
+5
+9
+0
+0
+2
+Armor of Agathys
+A spectral frost coats the caster, shielding them and chilling any who strike
+0
+0
+0
+2
+5
+Patron's Wrath
+The unknown patron answers, unleashing a torrent of shadow
+14
+22
+0
+0
+10

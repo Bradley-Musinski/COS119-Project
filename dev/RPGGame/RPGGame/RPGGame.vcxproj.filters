@@ -126,7 +126,7 @@
     <ClCompile Include="Town.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Potions.cpp">
+    <ClCompile Include="Store.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -200,7 +200,10 @@
     <ClInclude Include="Town.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Potions.h">
+    <ClInclude Include="ItemFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Store.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

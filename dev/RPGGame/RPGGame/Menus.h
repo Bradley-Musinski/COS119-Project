@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <conio.h>
 #include <string>
 #include "Screens.h"
 #include "Input.h"
@@ -18,43 +19,50 @@ namespace Menus
     {
         bool bIsLooping = true;
 
+
+        Screens::DisplayWelcomeMessage();
+
+        GEngine->Print("\t\t\t\t\t\t\033[5mPress ENTER to continue...", Color::Red, 1);
+
         while (bIsLooping)
         {
-
-            Screens::DisplayWelcomeMessage();
-            Screens::MenuOptions();
-
-            int MenuChoice = Input::GetInput("\t\t\t\t\t\t\t >> ", 1, 4);
-
-            switch (MenuChoice)
+            if (_getch() == 13)
             {
-            case 1:
-                GEngine->ClearConsole();
-                break;
+                GEngine->ClearLastLine(1);
+                Screens::MenuOptions();
 
-            case 2:
-                GEngine->ClearConsole();
-                break;
+                int MenuChoice = Input::GetInput("\t\t\t\t\t\t\t >> ", 1, 4);
 
-            case 3:
-                GEngine->ClearConsole();
-                Screens::DisplayCredits();
-                break;
-            case 4:
-                GEngine->ClearConsole();
-                Screens::GoodbyeMessage();
-                bIsLooping = false;
+                switch (MenuChoice)
+                {
+                case 1:
+                    GEngine->ClearConsole();
+                    break;
 
-                break;
+                case 2:
+                    GEngine->ClearConsole();
+                    break;
 
-            default:
-                GEngine->Print("ERROR: Invalid Choice...", Color::Red, 1);
-                GEngine->ClearConsole();
-                break;
+                case 3:
+                    GEngine->ClearConsole();
+                    Screens::DisplayCredits();
+                    break;
+                case 4:
+                    GEngine->ClearConsole();
+                    Screens::GoodbyeMessage();
+                    bIsLooping = false;
+
+                    break;
+
+                default:
+                    GEngine->Print("ERROR: Invalid Choice...", Color::Red, 1);
+                    GEngine->ClearConsole();
+                    break;
+                }
+
+                return MenuChoice;
+
             }
-
-
-            return MenuChoice;
         }
     }
 
