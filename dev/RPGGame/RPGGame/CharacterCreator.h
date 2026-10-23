@@ -121,15 +121,6 @@ namespace CharacterCreator
 
 		if (ClassSelection == 1)
 		{
-			GEngine->PrintBlankLines(1);
-			GEngine->TypeOut("[BAP] A Warlock, huh? Making deals with mysterious patrons already?", 
-				30ms, 1s, Color::Cyan, 1);
-			GEngine->TypeOut("[BAP] Bold. I like it!", 
-				30ms, 1s, Color::Cyan, 2);
-
-			const std::string border = "  ##" + std::string(Soldier.Desc.size() + 4, '=') + "##";
-			const std::string titlePad((Warlock.Desc.size() + 8 - Warlock.Name.size()) / 2, ' ');
-
 			PrintStats(Warlock);
 
 			GEngine->TypeOut("[BAP] Ready to sign on the dotted line? (Y/N)", 30ms, 0s, Color::Cyan, 1);
@@ -145,6 +136,8 @@ namespace CharacterCreator
 				std::cin.ignore();
 				GEngine->ClearConsole();
 				ApplyClass(player, Warlock);
+
+				Dialogue::CharacterWarlockDialogue1();
 			}
 			else if (userChoice == 'N' or userChoice == 'n')
 			{

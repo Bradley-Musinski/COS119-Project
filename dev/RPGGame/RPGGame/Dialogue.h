@@ -13,10 +13,10 @@ namespace IntroLines
 {
 	inline constexpr std::array<std::string_view, 5> Lines =
 	{
-		"[Narrator] You wake up in a patch of grass on the side of the road.",
-		"[Narrator] You have no memory of how you got here or even where here is.",
-		"[Narrator] The first thing you do is look around to take in your surroundings.",
-		"[Narrator] You don't see much of worth while, until you see smoke rising in the distance.",
+		"[Narrator] \x1b[3mYou wake up in a patch of grass on the side of the road.\x1b[23m",
+		"[Narrator] \x1b[3mYou have no memory of how you got here or even where here is.\x1b[23m",
+		"[Narrator] \x1b[3mThe first thing you do is look around to take in your surroundings.\x1b[23m",
+		"[Narrator] \x1b[3mYou don't see much of worth while, until you see smoke rising in the distance.\x1b[23m",
 		"[You] Huh? Wait... I see smoke! It could be a sign of civilization!"
 	};
 }
@@ -50,6 +50,13 @@ namespace CharacterCreator
 		"[Godwin] Well, nothing beats a good sword and a steady arm!"
 	};
 
+	inline constexpr std::array<std::string_view, 3> WarlockLines =
+	{
+		"[Godwin] Oh, you're a warlock?",
+		"[Narrator] Godwin's eyes light up with curiosity...",
+		"[Godwin] Well, a little magic never hurt anyone. Glad to have you around!"
+	};
+
 }
 
 namespace Dialogue
@@ -73,6 +80,13 @@ namespace Dialogue
 	void CharacterSoldierDialogue1()
 	{
 		for (const auto& line : CharacterCreator::SoliderLines)
+		{
+			GEngine->TypeOut(line, 30ms, 1s, Color::Cyan, 1);
+		}
+	}
+	void CharacterWarlockDialogue1()
+	{
+		for (const auto& line : CharacterCreator::WarlockLines)
 		{
 			GEngine->TypeOut(line, 30ms, 1s, Color::Cyan, 1);
 		}

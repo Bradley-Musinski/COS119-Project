@@ -126,6 +126,9 @@
     <ClCompile Include="Town.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Store.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine.h">
@@ -198,6 +201,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ItemFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Store.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

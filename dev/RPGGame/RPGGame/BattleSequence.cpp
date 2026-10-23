@@ -31,7 +31,7 @@ void BattleSequence::Battle(Player& player)
 	for (int i = 0; i < RandNum; i++)
 	{
 		GEngine->Print("<=><=><=><=><=><=><=> FIGHT <=><=><=><=><=><=><=>", Color::BMagenta, 1);
-		GEngine->TypeOut("Oh no!! You have been ambushed!!", 30ms, 1000ms, Color::Gray, 1);
+		GEngine->TypeOut("As you were walking down the road, enemies leap out from the shadows!", 30ms, 1000ms, Color::Gray, 1);
 
 		CreateEnemies(); // Creates a random enemy
 		RollForInitiative(player); // Each character (enemies and player) will roll to dictate the turn order
@@ -95,6 +95,8 @@ void BattleSequence::RollForInitiative(Player& player)
 
 	std::sort(turnOrder.begin(), turnOrder.end(),
 		[](Character* a, Character* b) { return a->Initiative() > b->Initiative(); });
+
+	GEngine->Print("<=><=><=> TURN ORDER <=><=><=>", Color::Blue, 1);
 
 	for (Character* c : turnOrder)
 	{
@@ -199,7 +201,7 @@ void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& e
 
 		GEngine->TypeOut(":: Type an Option from Below ::", 30ms, 1000ms, Color::Green, 1);
 		GEngine->TypeOut(": Basic Attack", 1ms, 1ms, Color::Green, 1);
-		GEngine->TypeOut(": Abilties", 1ms, 1ms, Color::Green, 1);
+		GEngine->TypeOut(": Abilities", 1ms, 1ms, Color::Green, 1);
 		GEngine->TypeOut(": Bag", 1ms, 1ms, Color::Green, 1);
 		GEngine->TypeOut(">> ", 1ms, 1ms, Color::White, 0);
 
@@ -231,7 +233,7 @@ void BattleSequence::BattleMenu(Player& player, const std::vector<Character*>& e
 		{
 			GEngine->ErrorMessage("ERROR: Please choose an option from above");
 			std::this_thread::sleep_for(2s);
-			GEngine->ClearLastLine(5);
+			GEngine->ClearLastLine(7);
 		}
 	}
 }
@@ -249,6 +251,7 @@ void BattleSequence::RunCombat(Player& player)
 
 	GEngine->ClearConsole();
 	GEngine->Print("<=><=><=><=><=> BATTLE START <=><=><=><=><=>", Color::BMagenta, 1);
+	std::this_thread::sleep_for(1s);
 
 	int round = 1;
 
@@ -374,6 +377,7 @@ bool BattleSequence::Bag(Player& player)
 	{
 		GEngine->Print(":: Your inventory is empty ::", Color::White, 1);
 		system("pause");
+		GEngine->ClearLastLine(8);
 		return false;
 	}
 
@@ -406,7 +410,7 @@ bool BattleSequence::Bag(Player& player)
 
 		if (typed == "back")
 		{
-			GEngine->ClearLastLine(9 + static_cast<int>(ItemList.size()));
+			GEngine->ClearLastLine(8 + static_cast<int>(ItemList.size()));
 			return false;
 		}
 
@@ -423,6 +427,8 @@ bool BattleSequence::Bag(Player& player)
 		}
 
 		GEngine->Print(":: You don't have that item. ::", Color::Red, 1);
+		std::this_thread::sleep_for(2s);
+		GEngine->ClearLastLine(3);
 	}
 
 	system("pause");

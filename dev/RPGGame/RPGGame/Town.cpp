@@ -1,10 +1,11 @@
 #include "Town.h"
 #include "GameEngine.h"
 #include "GameSession.h"
-#include "Player.h"
 #include "Input.h"
 #include "SaveSystem.h"
 #include "UMath.h"
+#include "Player.h"
+#include "Store.h"
 
 Town::Town(GameSession& _session, Player& _player)
 	: session(_session), player(_player)
@@ -13,7 +14,7 @@ Town::Town(GameSession& _session, Player& _player)
 void Town::TownArea()
 {
 	bSafeZone = true; // reset every time we enter town
-
+	
 	// Pick a name once and keep it for later visits
 	if (currentTownName.empty())
 	{
@@ -37,8 +38,9 @@ void Town::TownArea()
 		switch (userInput)
 		{
 		case 1: // Shop - needs the inventory system first
-			GEngine->TypeOut("The shop is closed for now. Come back later!", 15ms, 1000ms, Color::Cyan, 1);
-			GEngine->ClearLastLine(2);
+			Store store;
+			store.OpenStore(player);
+			PrintMenu();
 			break;
 		case 2:
 			LongRest(player);
@@ -56,9 +58,19 @@ void Town::TownArea()
 			}
 			else
 			{
-				for (const Item& item : ItemList)
+				for (int i = 0; i < ItemList.size(); i++)
 				{
-					GEngine->Print(item.ItemData.ItemName, Color::White, 1);
+					std::string LastItemName = ItemList[i].ItemData.ItemName;
+
+					GEngine->Print(ItemList[i].ItemData.ItemName + " | " + std::to_string(ItemList[i].ItemData.NumStack), Color::White);
+
+					if (ItemList[i].ItemData.ItemName == LastItemName && ItemList[i].ItemData.bIsStackable)
+					{
+						GEngine->Print(" | Restores " + std::to_string(ItemList[i].ItemData.Amount) + "hp", Color::White);
+					}
+
+
+					GEngine->PrintBlankLines(1);
 				}
 			}
 
